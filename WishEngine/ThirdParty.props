@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <ThirdPartyIncludes>D:\Projects\C++\WishEngine\thirdparty\freetype-2.4.0\include;D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\include;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\include;D:\Projects\C++\WishEngine\thirdparty\glm\glm;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;</ThirdPartyIncludes>
+    <ThirdPartyLibraries>D:\Projects\C++\WishEngine\thirdparty\freetype-2.4.0\objs\win32\vc2008;D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\lib\x86;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\lib\Release\Win32;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\lib\x86;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\lib32;</ThirdPartyLibraries>
+    <ThirdPartyInput>SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;opengl32.lib;WishEngine.lib;freetype240MT_D.lib;assimp.lib;</ThirdPartyInput>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="ThirdPartyIncludes">
+      <Value>$(ThirdPartyIncludes)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="ThirdPartyLibraries">
+      <Value>$(ThirdPartyLibraries)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="ThirdPartyInput">
+      <Value>$(ThirdPartyInput)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

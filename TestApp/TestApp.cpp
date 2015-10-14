@@ -8,15 +8,6 @@
 
 using namespace Wish;
 
-#pragma pack(push)
-struct Vertex
-{
-	vec3 position;
-	vec3 normal;
-	vec2 uv;
-};
-#pragma pack(pop)
-
 
 wish_geometry* m_JeepGo;
 wish_mesh* m_SphereMesh;

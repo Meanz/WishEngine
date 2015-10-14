@@ -62,15 +62,15 @@ namespace Wish
 		wish_asset_node RootShaderProgram;
 	};
 
-	__Wish_Export b32 Wish_Asset_CreateTexture(String id, u32 width, u32 height, PixelFormat pixelFormat);
+	__Wish_Export b32 Wish_Asset_CreateTexture(const char* id, u32 width, u32 height, PixelFormat pixelFormat);
 	__Wish_Export wish_texture* Wish_Asset_LoadTexture(const char* file);
-	__Wish_Export wish_texture* Wish_Asset_LoadTexture(String id, String file);
-	__Wish_Export wish_texture* Wish_Asset_GetTexture(String id);
+	__Wish_Export wish_texture* Wish_Asset_LoadTexture(const char* id, const char* file);
+	__Wish_Export wish_texture* Wish_Asset_GetTexture(const char* id);
 
-	__Wish_Export wish_shader_program* Wish_Asset_LoadShader(String id, String file);
-	__Wish_Export wish_shader_program* Wish_Asset_GetShader(String id);
+	__Wish_Export wish_shader_program* Wish_Asset_LoadShader(const char* id, const char* file);
+	__Wish_Export wish_shader_program* Wish_Asset_GetShader(const char* id);
 
 	void Wish_AssetManager_Init();
-	void Wish_AssetManager_FileUpdate(String dir, String fileName);
+	void Wish_AssetManager_FileUpdate(const char* dir, const char* fileName);
 	void Wish_AssetManager_Update();
 }

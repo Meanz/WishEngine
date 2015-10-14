@@ -7,7 +7,7 @@ namespace Wish
 
 #include <stdint.h>
 
-#define ASSERT(expr) if(!expr) { \
+#define ASSERT(expr) if(!(expr)) { \
 	((int*)0)[0] = 0; \
 				}
 

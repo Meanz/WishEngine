@@ -90,6 +90,7 @@
     <ClInclude Include="Murmur3.hpp" />
     <ClInclude Include="WishCore.h" />
     <ClInclude Include="WishDebug.h" />
+    <ClInclude Include="WishExports.h" />
     <ClInclude Include="WishHash.hpp" />
     <ClInclude Include="WishLight.hpp" />
     <ClInclude Include="Perlin.hpp" />
@@ -124,9 +125,12 @@
   <ItemGroup>
     <ClCompile Include="WishAssetManager.cpp" />
     <ClCompile Include="Murmur3.cpp" />
+    <ClCompile Include="WishCore.cpp" />
     <ClCompile Include="WishDebug.cpp" />
+    <ClCompile Include="WishExports.cpp" />
     <ClCompile Include="WishHash.cpp" />
     <ClCompile Include="WishModel.cpp" />
+    <ClCompile Include="WishOBJLoader.cpp" />
     <ClCompile Include="WishPrimitives.cpp" />
     <ClCompile Include="WishString.cpp" />
     <ClCompile Include="WishTransform.cpp" />
@@ -148,7 +152,6 @@
     <ClCompile Include="WishShader.cpp" />
     <ClCompile Include="WishTexture.cpp" />
     <ClCompile Include="WishTiming.cpp" />
-    <ClCompile Include="WishUniforms.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,7 +22,7 @@ public:
 			break;
 		case FW::Actions::Modified:
 			//std::cout << "File (" << dir + "\\" + filename << ") Modified! " << std::endl;
-			Wish_AssetManager_FileUpdate(dir, filename);
+			Wish_AssetManager_FileUpdate(dir.c_str(), filename.c_str());
 			break;
 		default:
 			printf("Should never happen!\n");
@@ -95,7 +95,7 @@ wish_asset_node* Wish_Asset_Find(wish_asset_node* root, wish_murmur3_hash hash)
 }
 
 
-b32 Wish::Wish_Asset_CreateTexture(String id, u32 width, u32 height, PixelFormat pixelFormat)
+b32 Wish::Wish_Asset_CreateTexture(const char* id, u32 width, u32 height, PixelFormat pixelFormat)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
 	if (!Wish_Asset_GetTexture(id)) {
@@ -105,7 +105,7 @@ b32 Wish::Wish_Asset_CreateTexture(String id, u32 width, u32 height, PixelFormat
 
 		Wish_Texture_Create(&asset->Texture, width, height, pixelFormat, pixelFormat, GL_UNSIGNED_BYTE);
 
-		strcpy_s(asset->Base.Name, id.c_str());
+		strcpy_s(asset->Base.Name, id);
 	}
 	return true;
 }
@@ -117,13 +117,13 @@ wish_texture* Wish::Wish_Asset_LoadTexture(const char* file)
 	return Wish_Asset_LoadTexture("tex_" + (assetManager.m_TexCounter++), file);
 }
 
-wish_texture* Wish::Wish_Asset_LoadTexture(String id, String file)
+wish_texture* Wish::Wish_Asset_LoadTexture(const char* id, const char* file)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
 	//Do we have any assets with this name already?
 	//Hash our id
 	//Murmur3Hash hash = Wish_Hash(id.c_str());
-	wish_murmur3_hash hash = Wish_Hash(id.c_str());
+	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_texture* asset = (wish_asset_texture*)Wish_Asset_Find(&assetManager.RootTexture, hash);
 	if (asset == NULL)
 	{
@@ -134,14 +134,17 @@ wish_texture* Wish::Wish_Asset_LoadTexture(String id, String file)
 		if (Wish_Texture_DEBUGLoadTexture(&asset->Texture, file)) {
 			//I don't like these things, they feel like dyn alloc things
 			//OH WELL
-			size_t _last_slash = file.find_last_of("/\\");
-			ASSERT((_last_slash != String::npos));
-			String _file = file.substr(_last_slash + 1);
+			
+			//Wrap in std string
+			std::string sfile(file);
+			size_t _last_slash = sfile.find_last_of("/\\");
+			ASSERT((_last_slash != std::string::npos));
+			std::string _file = sfile.substr(_last_slash + 1);
 			printf("LoadTexture \"%s\"\n", _file.c_str());
 
 			//asset->Base.Folder = folder;
 			strcpy_s(asset->Base.FileName, _file.c_str());
-			strcpy_s(asset->Base.Name, id.c_str());
+			strcpy_s(asset->Base.Name, id);
 
 			Wish_Asset_Insert(&assetManager.RootTexture, &asset->Base);
 
@@ -153,7 +156,7 @@ wish_texture* Wish::Wish_Asset_LoadTexture(String id, String file)
 			//Just free the memory we allocated, this texture is not usable
 			Wish_Memory_Free((void*)asset);
 			asset = NULL;
-			printf("Unable to load texture: %s\n", file.c_str());
+			printf("Unable to load texture: %s\n", file);
 		}
 	}
 	else
@@ -163,18 +166,18 @@ wish_texture* Wish::Wish_Asset_LoadTexture(String id, String file)
 	return asset == NULL ? NULL : &asset->Texture;
 }
 
-wish_texture* Wish::Wish_Asset_GetTexture(String id)
+wish_texture* Wish::Wish_Asset_GetTexture(const char* id)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	wish_murmur3_hash hash = Wish_Hash(id.c_str());
+	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_texture* asset = (wish_asset_texture*)Wish_Asset_Find(&assetManager.RootTexture, hash);
 	return asset == NULL ? NULL : &asset->Texture;
 }
 
-wish_shader_program* Wish::Wish_Asset_LoadShader(String id, String file)
+wish_shader_program* Wish::Wish_Asset_LoadShader(const char* id, const char* file)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	wish_murmur3_hash hash = Wish_Hash(id.c_str());
+	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_shaderprogram* asset = (wish_asset_shaderprogram*)Wish_Asset_Find(&assetManager.RootShaderProgram, hash);
 	if (asset == NULL)
 	{
@@ -182,17 +185,20 @@ wish_shader_program* Wish::Wish_Asset_LoadShader(String id, String file)
 		asset = (wish_asset_shaderprogram*)Wish_Memory_Alloc(MemoryType::LONG_LIFE, sizeof(wish_asset_shaderprogram));
 		ZeroMemory(asset, sizeof(wish_asset_shaderprogram));
 
-		size_t _last_slash = file.find_last_of("/\\");
-		ASSERT((_last_slash != String::npos));
-		String _file = file.substr(_last_slash + 1);
-
+		
+		//Wrap in std string
+		std::string sfile(file);
+		size_t _last_slash = sfile.find_last_of("/\\");
+		ASSERT((_last_slash != std::string::npos));
+		std::string _file = sfile.substr(_last_slash + 1);
 		printf("LoadShader \"%s\"\n", _file.c_str());
 
+		//asset->Base.Folder = folder;
 		strcpy_s(asset->Base.FileName, _file.c_str());
-		strcpy_s(asset->Base.Name, id.c_str());
+		strcpy_s(asset->Base.Name, id);
 
 		//TODO: ALLOC DIFFERENTLY
-		wish_shader_program* pProgram = new wish_shader_program();
+		wish_shader_program* pProgram = (wish_shader_program*)Wish_Memory_Alloc(sizeof(wish_shader_program));
 		//->
 		asset->ShaderProgram = pProgram;
 		Wish_ShaderProgram_Parse(pProgram, file);
@@ -202,10 +208,10 @@ wish_shader_program* Wish::Wish_Asset_LoadShader(String id, String file)
 	return asset == NULL ? NULL : asset->ShaderProgram;
 }
 
-wish_shader_program* Wish::Wish_Asset_GetShader(String id)
+wish_shader_program* Wish::Wish_Asset_GetShader(const char* id)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	wish_murmur3_hash hash = Wish_Hash(id.c_str());
+	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_shaderprogram* asset = (wish_asset_shaderprogram*)Wish_Asset_Find(&assetManager.RootShaderProgram, hash);
 	return asset == NULL ? NULL : asset->ShaderProgram;
 }
@@ -233,7 +239,7 @@ void Wish::Wish_AssetManager_Init()
 }
 
 
-void Wish::Wish_AssetManager_FileUpdate(String dir, String file) {
+void Wish::Wish_AssetManager_FileUpdate(const char* dir, const char* file) {
 	/*wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
 	//Find file
 	auto iter = assetManager.m_mTrackedTextures.find(file);

@@ -3,7 +3,6 @@
 #include "WishRenderer.hpp"
 #include "WishPrimitives.h"
 #include "WishOBJLoader.hpp"
-#include "WishUniforms.cpp"
 
 FreetypeFont m_DebugFont;
 
@@ -79,15 +78,15 @@ void Wish::Wish_Renderer_ApplyMaterial(wish_shader_program* pShaderProgram, wish
 
 		//Iterate through all uniforms
 		GLuint samplerIndex = 0;
-		wish_shader_uniform_data& sud = pShaderProgram->m_UniformData;
-		for (size_t i = 0; i < sud.m_vUniforms.size(); i++) {
-			GLint loc = sud.m_vUniformLocations[i];
-			wish_murmur3_hash& hash = sud.m_vHashedUniforms[i];
+		wish_shader_uniform_data& sud = pShaderProgram->UniformData;
+		for (size_t i = 0; i < sud.NumUniforms; i++) {
+			GLint loc = sud.Locations[i];
+			wish_murmur3_hash& hash = sud.Hashes[i];
 			if (loc == -1) {
 				//Bad location
 				continue;
 			}
-			String& name = sud.m_vUniforms[i];
+			const char* name = Wish_CString(sud.Names[i]);
 
 			if (loc == -1) {
 				//Bad location
@@ -131,15 +130,15 @@ void Wish_Renderer_ApplyUniforms(wish_shader_program* pShaderProgram, wish_mater
 
 	//Iterate through all uniforms
 	GLuint samplerIndex = 0;
-	wish_shader_uniform_data& sud = pShaderProgram->m_UniformData;
-	for (size_t i = 0; i < sud.m_vUniforms.size(); i++) {
-		GLint loc = sud.m_vUniformLocations[i];
-		wish_murmur3_hash& hash = sud.m_vHashedUniforms[i];
+	wish_shader_uniform_data& sud = pShaderProgram->UniformData;
+	for (size_t i = 0; i < sud.NumUniforms; i++) {
+		GLint loc = sud.Locations[i];
+		wish_murmur3_hash& hash = sud.Hashes[i];
 		if (loc == -1) {
 			//Bad location
 			continue;
 		}
-		String& name = sud.m_vUniforms[i];
+		const char* name = Wish_CString(sud.Names[i]);
 		//Hardcode for now
 		if (hash == hashTable[T_Albedo])
 		{
@@ -248,7 +247,7 @@ void Wish_Renderer_ApplyUniforms(wish_shader_program* pShaderProgram, wish_mater
 			glUniform1f(loc, ((wish_point_light*)pLight)->m_AttenuationExp);
 		}
 		else  {
-			printf("Unhandled uniform %s\n", name.c_str());
+			printf("Unhandled uniform %s\n", name);
 		}
 
 	}
@@ -343,12 +342,7 @@ wish_shader_program* Wish::Wish_Renderer_GetShaderProgram() {
 void Wish::Wish_Renderer_SetShaderProgram(wish_shader_program* pShaderProgram) {
 	wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
 	renderer.m_pCurrentShaderProgram = pShaderProgram;
-	if (pShaderProgram != NULL && pShaderProgram->glHandle > 0) {
-		Wish_ShaderProgram_Bind(pShaderProgram);
-	}
-	else {
-		glUseProgram(0);
-	}
+	Wish_ShaderProgram_Bind(pShaderProgram);
 }
 
 

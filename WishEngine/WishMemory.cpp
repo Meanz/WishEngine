@@ -27,6 +27,7 @@ void Wish::Wish_Memory_Init(wish_game_memory* gameMemory)
 	gameMemory->FirstBlock->Size = 0;
 	gameMemory->FirstBlock->Next = gameMemory->FirstBlock;
 	gameMemory->FirstBlock->Prev = gameMemory->FirstBlock;
+	gameMemory->FirstBlock->Magic = 0x28;
 
 	//Insert the memory block
 	Wish_Memory_B_InsertBlock(
@@ -66,6 +67,7 @@ wish_memory_block* Wish::Wish_Memory_B_InsertBlock(wish_memory_block* prev, u64 
 	block->Next = prev->Next;
 	block->Prev->Next = block;
 	block->Next->Prev = block;
+	block->Magic = 0x28;
 	return block;
 }
 wish_memory_block* Wish::Wish_Memory_B_FindBlockForSize(wish_memory_block* sentinel, u64 size)
@@ -74,6 +76,7 @@ wish_memory_block* Wish::Wish_Memory_B_FindBlockForSize(wish_memory_block* senti
 	// TODO(meanzie): find best match block!
 	for (wish_memory_block* block = sentinel->Next; block != sentinel; block = block->Next)
 	{
+		ASSERT(block->Magic == 0x28);
 		if (!(block->Flags & Memory_Used))
 		{
 			if (block->Size >= size)

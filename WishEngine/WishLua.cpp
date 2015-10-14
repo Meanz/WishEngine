@@ -36,10 +36,11 @@ namespace Wish
 		const char* name = luaL_checkstring(L, 1);
 
 		//Send this to the scenegraph
-		Wish_Scene_NewTransform(name);
+		//Wish_Scene_NewTransform(name);
+		printf("Name: %s . \n", name);
 
 		//Figure out how to return a representation of this thing
-
+		lua_pushnumber(L, 5);
 
 		return 1; /* Number of arguments */
 	}

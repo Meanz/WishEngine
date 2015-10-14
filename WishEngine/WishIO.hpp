@@ -19,6 +19,7 @@ namespace Wish
 
 	//THIS IS A SUCKY FUNCTION
 	//BUT IS WORKS
+	wish_string Wish_IO_ReadFileToString(const char* fileName);
 	__Wish_Export std::string ReadFileToString(const char* fileName);
 	__Wish_Export u8* Wish_IO_ReadFile(const char* fileName);
 	__Wish_Export b32 Wish_IO_WriteFile(const char* fileName, u8* data, u32 size);

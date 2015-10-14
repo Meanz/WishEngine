@@ -22,6 +22,7 @@ namespace Wish {
 		wish_memory_block* Next;
 		u64 Flags;
 		u64 Size;
+		u8 Magic;
 	};
 
 	struct wish_game_memory

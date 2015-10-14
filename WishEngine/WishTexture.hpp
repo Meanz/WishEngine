@@ -49,5 +49,5 @@ namespace Wish
 	void Wish_Texture_Enable();
 	void Wish_Texture_Disable();
 
-	bool Wish_Texture_DEBUGLoadTexture(wish_texture* texture, String fileName);
+	bool Wish_Texture_DEBUGLoadTexture(wish_texture* texture, const char* fileName);
 }

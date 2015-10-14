@@ -7,6 +7,10 @@
 #include <WishPlatform.h>
 #include "WishThreading.cpp"
 
+#include <iostream>
+
+using namespace std;
+
 using namespace Wish;
 
 struct wish_game_code
@@ -193,7 +197,6 @@ int main(int argc, char* argv[])
 	int w = 1024;
 	int h = 768;
 	char* title = "Wish Engine";
-
 
 	wish_game_state state;
 	SDL_zero(state);

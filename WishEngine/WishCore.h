@@ -39,5 +39,8 @@ typedef mat4 m4;
 #include "WishTypes.h"
 
 //Not sure about this one yet
-#include <string>
-typedef std::string String;
+//This allocates a string for you
+#include "WishString.h"
+
+//__Wish_Export void* operator new (size_t size, const char*, i32);
+//#define new new(__FILE__, __LINE__)

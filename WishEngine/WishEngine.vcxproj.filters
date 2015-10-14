@@ -177,6 +177,9 @@
     <ClInclude Include="WishModel.h">
       <Filter>Header Files\Engine\IO</Filter>
     </ClInclude>
+    <ClInclude Include="WishExports.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -248,8 +251,14 @@
     <ClCompile Include="WishModel.cpp">
       <Filter>Source Files\Engine\IO</Filter>
     </ClCompile>
-    <ClCompile Include="WishUniforms.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
+    <ClCompile Include="WishCore.cpp">
+      <Filter>Source Files\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOBJLoader.cpp">
+      <Filter>Source Files\Engine\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="WishExports.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

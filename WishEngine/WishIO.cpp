@@ -9,6 +9,24 @@ namespace Wish
 		return exception::what();
 	}
 
+	wish_string Wish_IO_ReadFileToString(const char* fileName)
+	{
+		wish_string str;
+	
+		//So here is the deal, I became sad, then I did this
+
+		std::string rfts = ReadFileToString(fileName);
+
+		//Then I was a it ashamed.
+		Wish_String_Alloc(&str, (rfts.size() * sizeof(u8))); //The entire file, + one byte for the null terminator
+
+		//But I looked the other way
+		str = rfts.c_str();
+
+		//And you know, I ended up getting there
+		return str;
+	}
+
 	std::string ReadFileToString(const char* fileName) {
 		std::ifstream file(fileName);
 		if (!file.is_open())

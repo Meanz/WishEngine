@@ -45,9 +45,9 @@ void Wish::Wish_Texture_Disable() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool Wish::Wish_Texture_DEBUGLoadTexture(wish_texture* texture, String fileName) {
+bool Wish::Wish_Texture_DEBUGLoadTexture(wish_texture* texture, const char* fileName) {
 	bool result = false;
-	SDL_Surface *image = IMG_Load(fileName.c_str());
+	SDL_Surface *image = IMG_Load(fileName);
 	//If we have a texture
 	//Free it
 	if (texture->glHandle > 0) {

@@ -24,7 +24,6 @@ namespace Wish
 		//check if we already have an allocated buffer
 		if (this->Handle && other)
 		{
-			printf("Freeing string: %s \n", (char*)this->Handle);
 			Wish_String_Free(*this);
 		}
 		if (other)

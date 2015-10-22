@@ -2,7 +2,7 @@
 
 #include "VoxelChunk.hpp"
 
-class VoxelTerrain
+class VoxelTerrain : public WishGameObject
 {
 
 private:
@@ -13,8 +13,9 @@ private:
 
 public:
 	std::vector<VoxelChunk*> m_vChunks;
-	wish_game_object* transf;
 
 	VoxelTerrain();
 	~VoxelTerrain();
+
+	virtual void OnUpdate();
 };

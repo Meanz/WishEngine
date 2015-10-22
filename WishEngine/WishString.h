@@ -32,10 +32,10 @@ namespace Wish
 	};
 
 	//Hmm
-	char* Wish_CString(wish_string str);
+	__Wish_Export char* Wish_CString(wish_string str);
 	void Wish_String_Alloc(wish_string* str, u32 strlen);
-	b32 Wish_String_Free(wish_string str);
-	b32 Wish_String_IsValid(wish_string str);
-	wish_string Wish_String(const char* data);
-	wish_string Wish_Stringf(const char* format, ...);
+	__Wish_Export b32 Wish_String_Free(wish_string str);
+	__Wish_Export b32 Wish_String_IsValid(wish_string str);
+	__Wish_Export wish_string Wish_String(const char* data);
+	__Wish_Export wish_string Wish_Stringf(const char* format, ...);
 }

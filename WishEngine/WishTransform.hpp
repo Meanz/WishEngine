@@ -21,8 +21,10 @@ namespace Wish
 		WISH_TRANSFORM_TYPE_LIGHT,
 	};
 
-	struct wish_transform
+	/* Example C++ Impl */
+	class WishTransform
 	{
+	public:
 		char Name[WISH_TRANSFORM_NAME_SIZE];
 		vec3 Position;
 		quat Rotation;
@@ -34,22 +36,28 @@ namespace Wish
 		wish_transform_type TransformType;
 
 		//Circular Hierarchy
-		wish_transform* Child;  //32
-		wish_transform* Parent; //32
-		wish_transform* Prev;	//32
-		wish_transform* Next;	//PTR, 32?
+		WishTransform* Child;  //32
+		WishTransform* Parent; //32
+		WishTransform* Prev;	//32
+		WishTransform* Next;	//PTR, 32?
+
+
+		WishTransform();
+		WishTransform(const char* name);
+		__Wish_Export ~WishTransform();
+
+		void SetName(const char* name);
+
+		__Wish_Export b32 HasChild(WishTransform* child);
+		__Wish_Export WishTransform* GetLastChild();
+
+		__Wish_Export void Attach(WishTransform* other);
+		__Wish_Export void Detach(WishTransform* other);
+
+		__Wish_Export mat4& CalculateLocal();
+		__Wish_Export mat4& CalculateGlobal(mat4& parent);
+
+		__Wish_Export void LookAt(v3 eye, v3 center, v3 up);
 	};
-
-	__Wish_Export void Wish_Transform_Init(wish_transform* transform);
-
-	__Wish_Export void Wish_Transform_SetName(wish_transform* transform, const char* name);
-
-	__Wish_Export void Wish_Transform_Attach(wish_transform* transform, wish_transform* child);
-	__Wish_Export void Wish_Transform_Detatch(wish_transform* transform, wish_transform* child);
-
-	__Wish_Export mat4* Wish_Transform_CalculateLocal(wish_transform* transform);
-	__Wish_Export mat4* Wish_Transform_CalculateGlobal(wish_transform* transform, mat4& parent);
-
-	__Wish_Export void Wish_Transform_LookAt(wish_transform* transform, vec3 eye, vec3 center, vec3 up);
 
 }

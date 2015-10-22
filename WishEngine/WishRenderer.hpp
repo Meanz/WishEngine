@@ -14,15 +14,6 @@ namespace Wish
 		LIGHTING = 1,
 	};
 
-	struct wish_render_texture
-	{
-		wish_framebuffer Framebuffer;
-		wish_texture Texture;
-	};
-
-	void Wish_RenderTexture_Create(wish_render_texture* renderTexture, GLuint width, GLuint height);
-	void Wish_RenderTexture_Prepare(wish_render_texture* renderTexture);
-
 	struct GeometryBuffer
 	{
 		wish_framebuffer Framebuffer;
@@ -36,6 +27,12 @@ namespace Wish
 
 	struct wish_renderer_context
 	{
+
+		//2.0!
+		mat4 WorldMatrix;
+
+		//
+
 		vec3 kernel[KERNEL_SIZE];
 		bool isKernelDefined = false;
 
@@ -58,8 +55,8 @@ namespace Wish
 		wish_render_texture m_OffScreenA;
 		wish_render_texture m_OffScreenB;
 
-		wish_shader_program* m_pDeferredShader;
-		wish_shader_program* m_pDeferredRenderingShader;
+		wish_shader_program* DeferredShader;
+		wish_shader_program* DeferredRenderingShader;
 		wish_shader_program* m_pSimpleShader;
 		wish_shader_program* m_pSimpleUnlitShader;
 		wish_shader_program* m_pSSAOShader;
@@ -69,14 +66,14 @@ namespace Wish
 		wish_shader_program* m_pDirectionalLightShader;
 		wish_shader_program* m_pNullShader;
 
-		wish_mesh* m_Rect;
-		wish_mesh* m_Sphere;
+		wish_mesh* Rect;
+		wish_mesh* Sphere;
 
 #define WISH_MAX_GEOMETRY_QUEUE_SIZE 4096
 #define WISH_MAX_LIGHT_QUEUE_SIZE 128
 
 		u32 NumGeometries;
-		wish_geometry* GeometryPassQueue[WISH_MAX_GEOMETRY_QUEUE_SIZE];
+		WishGeometry* GeometryPassQueue[WISH_MAX_GEOMETRY_QUEUE_SIZE];
 
 		u32 NumLights;
 		wish_light* LighPassQueue[WISH_MAX_LIGHT_QUEUE_SIZE];
@@ -97,6 +94,8 @@ namespace Wish
 
 	
 	void Wish_Renderer_Init(int width, int height);
+
+	void Wish_Renderer_SetWorldMatrix(const mat4& world);
 	const mat4& Wish_Renderer_GetWorldMatrix();
 
 	wish_shader_program* Wish_Renderer_GetShaderProgram();
@@ -108,7 +107,7 @@ namespace Wish
 	GLuint Wish_Renderer_GetWidth();
 	GLuint Wish_Renderer_GetHeight();
 
-	void Wish_Renderer_Submit(wish_geometry* geometry);
+	void Wish_Renderer_Submit(WishGeometry* geometry);
 	void Wish_Renderer_Submit(wish_light* light);
 
 	void Wish_Renderer_BindTexture(GLuint textureSlot, wish_texture* pTexture);
@@ -117,5 +116,6 @@ namespace Wish
 
 	void Wish_Renderer_DrawMesh(wish_mesh* mesh, wish_material* material);
 
+	void Wish_Renderer_ApplyUniforms(wish_shader_program* pShaderProgram, wish_material* pMaterial, wish_light* pLight);
 	void Wish_Renderer_ApplyMaterial(wish_shader_program* pShaderProgram, wish_material* pMaterial);
 }

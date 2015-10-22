@@ -115,3 +115,24 @@ void Wish::Wish_Framebuffer_BindWrite(wish_framebuffer* framebuffer) {
 void Wish_Framebuffer_SetReadBuffer(FramebufferAttachment fa) {
 	glReadBuffer(fa);
 }
+
+//###################
+//## RenderTexture ##
+//###################
+
+void Wish::Wish_RenderTexture_Create(wish_render_texture* renderTexture, GLuint width, GLuint height)
+{
+	Wish_Texture_Create(&renderTexture->Texture, width, height, PixelFormat::RGBA32F, PixelFormat::RGBA, GL_FLOAT, GL_NEAREST, GL_NEAREST);
+	Wish_Framebuffer_Create(&renderTexture->Framebuffer);
+	Wish_Framebuffer_AttachTexture(&renderTexture->Framebuffer, &renderTexture->Texture, FramebufferAttachment::COLOR0);
+	Wish_Framebuffer_Validate(&renderTexture->Framebuffer);
+	Wish_Framebuffer_Bind(NULL);
+}
+
+void Wish::Wish_RenderTexture_Prepare(wish_render_texture* renderTexture)
+{
+	Wish_Framebuffer_BindWrite(&renderTexture->Framebuffer);
+	//GLenum buffers[] = { FramebufferAttachment::COLOR0 };
+	//glDrawBuffer(FramebufferAttachment::COLOR0);
+	glClear(GL_COLOR_BUFFER_BIT);
+}

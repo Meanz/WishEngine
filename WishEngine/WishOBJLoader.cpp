@@ -101,11 +101,16 @@ namespace Wish
 		ivec3 p2;
 		ivec3 p3;
 	};
+	
+	struct OBJFile
+	{
+
+	};
 
 	wish_mesh* WishOBJLoader_Load(const char* fileName) {
 		using namespace glm;
 		//DONT LIKE THE NEW CALL!!! :((((
-		wish_mesh* mesh = new wish_mesh();
+		wish_mesh* mesh = 0;
 		try{
 			std::string data = ReadFileToString(fileName);
 
@@ -118,7 +123,7 @@ namespace Wish
 			size_t nextNL = 0;
 			while (nextNL != std::string::npos) {
 				if ((nextNL + 1) >= data.size()) {
-					printf("Thing broke it :'(\n");
+					//printf("Thing broke it :'(\n");
 					break;
 				}
 
@@ -224,9 +229,11 @@ namespace Wish
 				meshIndices[i * 3 + 2] = (vertOff++);
 			}
 
-			Wish_Mesh_SetVertices(mesh, (GLfloat*)&meshVertices[0], meshVertices.size(), sizeof(Vertex_VNT));
-			Wish_Mesh_SetIndices(mesh, &meshIndices[0], meshIndices.size());
-			Wish_Mesh_Compile(mesh);
+			mesh = Wish_Mesh_Create();
+			mesh->MeshType = WISH_VERTEX_VNT;
+			mesh->SetVertices((GLfloat*)&meshVertices[0], meshVertices.size(), sizeof(Vertex_VNT));
+			mesh->SetIndices(&meshIndices[0], meshIndices.size());
+			mesh->Compile();
 		}
 		catch (WishIOException&) {
 			assert(false);

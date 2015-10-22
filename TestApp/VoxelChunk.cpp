@@ -21,14 +21,13 @@
     elapsedTime=(float)(t2.QuadPart-t1.QuadPart)/(frequency.QuadPart/1000); \
     std::wcout<<elapsedTime<<L" ms"<<endl;
 
-VoxelChunk::VoxelChunk(size_t x, size_t y) :
-m_X(x),
-m_Y(y),
-m_Perlin(0)
+VoxelChunk::VoxelChunk(size_t x, size_t y) : WishGeometry("VoxelChunk")
 {
-	geometry = Wish_Scene_NewGeometry("VoxelChunk");
-	geometry->Transform.Position = vec3(m_X * CHUNK_SIZE * QUAD_SIZE, 0.0f, m_Y * CHUNK_SIZE * QUAD_SIZE);
-	Wish_Transform_CalculateGlobal(&geometry->Transform, mat4(1.0f));
+	m_X = x;
+	m_Y = y;
+	m_Perlin = 0;
+	Position = vec3(m_X * CHUNK_SIZE * QUAD_SIZE, 0.0f, m_Y * CHUNK_SIZE * QUAD_SIZE);
+	CalculateGlobal(mat4(1.0f));
 
 	m_Perlin = new PerlinNoise(1337, 1.2, 0.006, 8, 4);
 	//m_Perlin->amplitude = 100;
@@ -417,13 +416,14 @@ void VoxelChunk::Build() {
 
 #endif
 
-	Wish_Mesh_SetVertices(&pMesh, (GLfloat*)&vertices[0], vertices.size(), sizeof(Vertex_VNT));
-	Wish_Mesh_SetIndices(&pMesh, (GLuint*)&indices[0], indices.size());
-	Wish_Mesh_Compile(&pMesh);
+	pMesh.MeshType = WISH_VERTEX_VNT;
+	pMesh.SetVertices((GLfloat*)&vertices[0], vertices.size(), sizeof(Vertex_VNT));
+	pMesh.SetIndices((GLuint*)&indices[0], indices.size());
+	pMesh.Compile();
 
 	//Attach the compiled mesh to our geometry node
-	geometry->Meshes[0] = (&pMesh);
-	geometry->Material.Albedo = Wish_Asset_GetTexture("wald");
+	Meshes[0] = (&pMesh);
+	Material.Albedo = Wish_Asset_GetTexture("wald");
 	//Wish_Material_Set(&geometry->Material, "Albedo", Wish_Asset_GetTexture("wald"));
 
 	printf("Loaded Chunk %d/%d\n", m_X, m_Y);

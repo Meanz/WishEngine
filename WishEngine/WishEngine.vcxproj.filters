@@ -180,6 +180,12 @@
     <ClInclude Include="WishExports.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="WishDeferredRenderer.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishGeometry.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -259,6 +265,15 @@
     </ClCompile>
     <ClCompile Include="WishExports.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="WishDeferredRenderer.cpp">
+      <Filter>Source Files\Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="WishLight.cpp">
+      <Filter>Source Files\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="WishGeometry.cpp">
+      <Filter>Source Files\Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

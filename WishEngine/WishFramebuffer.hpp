@@ -53,4 +53,13 @@ namespace Wish
 
 	void Wish_Framebuffer_SetReadBuffer(FramebufferAttachment fa);
 
+	struct wish_render_texture
+	{
+		wish_framebuffer Framebuffer;
+		wish_texture Texture;
+	};
+
+	void Wish_RenderTexture_Create(wish_render_texture* renderTexture, GLuint width, GLuint height);
+	void Wish_RenderTexture_Prepare(wish_render_texture* renderTexture);
+
 }

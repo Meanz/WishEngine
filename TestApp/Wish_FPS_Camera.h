@@ -6,18 +6,21 @@
 namespace Wish
 {
 
-	//fwd decls
-	struct wish_camera;
-	void Wish_Camera_LookAt(wish_camera*, v3, v3);
-	void Wish_Camera_CalculateViewMatrix(wish_camera*);
-	void Wish_Camera_ApplyImmediate(wish_camera*);
-
-	struct wish_fps_camera
+	struct wish_fps_camera : public wish_camera
 	{
-		wish_camera* Camera;
 		r32 Yaw;
 		r32 Pitch;
 		v3 Position;
+
+		wish_fps_camera() : wish_camera()
+		{
+
+		}
+
+		~wish_fps_camera() 
+		{
+
+		}
 	};
 
 	v3 Wish_Math_DirectionFromEuler(r32 yaw, r32 pitch)
@@ -62,8 +65,8 @@ namespace Wish
 
 	void Wish_FPSCamera_Update(wish_fps_camera* camera)
 	{
-		Wish_Camera_LookAt(camera->Camera, camera->Position, camera->Position + (Wish_FPSCamera_GetDirection(camera) * 2.0f));
-		Wish_Camera_CalculateViewMatrix(camera->Camera);
-		Wish_Camera_ApplyImmediate(camera->Camera);
+		camera->LookAt(camera->Position, camera->Position + (Wish_FPSCamera_GetDirection(camera) * 2.0f), v3(0.0, 1.0, 0.0));
+		camera->CalculateViewMatrix();
+		camera->ApplyImmediate();
 	}
 }

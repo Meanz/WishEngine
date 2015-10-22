@@ -50,12 +50,14 @@ namespace Wish
 		indices[4] = 3;
 		indices[5] = 0;
 
-		wish_mesh* mesh = (wish_mesh*)Wish_Memory_Alloc(sizeof(wish_mesh));
-		Wish_Mesh_SetVertices(mesh, (r32*)vertices, 4, sizeof(Vertex_VNT));
-		Wish_Mesh_SetIndices(mesh, (u32*)indices, 6);
-		Wish_Mesh_Compile(mesh);
-		mesh->m_pVertices = 0;
-		mesh->m_pIndices = 0;
+		wish_mesh* mesh = Wish_Mesh_Create();
+		mesh->MeshType = WISH_VERTEX_VNT;
+		mesh->SetVertices((r32*)vertices, 4, sizeof(Vertex_VNT));
+		mesh->SetIndices((u32*)indices, 6);
+		mesh->Compile();
+		//Delete data
+		mesh->Vertices = 0;
+		mesh->Indices = 0;
 		Wish_Memory_Free(vertices);
 		Wish_Memory_Free(indices);
 		return mesh;
@@ -112,12 +114,14 @@ namespace Wish
 		indices[4] = 3;
 		indices[5] = 0;
 
-		wish_mesh* mesh = (wish_mesh*)Wish_Memory_Alloc(sizeof(wish_mesh));
-		Wish_Mesh_SetVertices(mesh, (r32*)vertices, 4, sizeof(Vertex_VNT));
-		Wish_Mesh_SetIndices(mesh, (u32*)indices, 6);
-		Wish_Mesh_Compile(mesh);
-		mesh->m_pVertices = 0;
-		mesh->m_pIndices = 0;
+		wish_mesh* mesh = Wish_Mesh_Create();
+		mesh->MeshType = WISH_VERTEX_VNT;
+		mesh->SetVertices((r32*)vertices, 4, sizeof(Vertex_VNT));
+		mesh->SetIndices((u32*)indices, 6);
+		mesh->Compile();
+		//Delete data
+		mesh->Vertices = 0;
+		mesh->Indices = 0;
 		Wish_Memory_Free(vertices);
 		Wish_Memory_Free(indices);
 		return mesh;

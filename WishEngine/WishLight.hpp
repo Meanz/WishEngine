@@ -12,26 +12,32 @@ namespace Wish
 		LIGHT_SPOTLIGHT
 	};
 
-	struct wish_light
+	class wish_light : public WishTransform
 	{
-		wish_transform Transform;
-
-		LightType m_LightType;
+	public:
+		wish_light(const char* name);
+		~wish_light();
+		
+		LightType LightType;
 		//Position?
 		vec3 Position;
 		//Color
-		vec3 m_Diffuse;
-		GLfloat m_DiffuseIntensity;
+		vec3 Diffuse;
+		GLfloat DiffuseIntensity;
 		//Need moar details?
-		vec3 m_Specular;
-		GLfloat m_SpecularIntensity;
+		vec3 Specular;
+		GLfloat SpecularIntensity;
 	};
 
-	struct wish_point_light
+	class wish_point_light : public wish_light
 	{
-		wish_light base;
-		GLfloat m_AttenuationLinear;
-		GLfloat m_AttenuationExp;
-		GLfloat m_AttenuationConstant;
+	public:
+
+		wish_point_light(const char* name);
+		~wish_point_light();
+
+		GLfloat AttenuationLinear;
+		GLfloat AttenuationExp;
+		GLfloat AttenuationConstant;
 	};
 }

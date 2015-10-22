@@ -10,123 +10,127 @@
 //Make this a pointer and let the state know about it?
 //state->engine
 //This way the platform layer has 100% control
-wish_engine_context* context = NULL;
-
-i32 Wish::Wish_Engine_GetFPS()
+namespace Wish
 {
-	CONTEXT_CHECK;
-	return 0;
-}
+	wish_engine_context* context = NULL;
 
-void Wish::Wish_Engine_SetApp(wish_engine_callback app)
-{
-	CONTEXT_CHECK;
-	context->Callback = app;
-	if (context->Callback.OnInit) {
-		context->Callback.OnInit();
+	i32 Wish_Engine_GetFPS()
+	{
+		CONTEXT_CHECK;
+		return 0;
 	}
-}
 
-//Input
-//Input
-b32 Wish::Wish_Input_IsKeyDown(u32 key)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (key >= WISH_INPUT_MAX_KEYS)
-		return 0;
-	return  context->State->Input.KeysDown[key];
-}
-b32 Wish::Wish_Input_IsKeyPressed(u32 key)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (key >= WISH_INPUT_MAX_KEYS)
-		return 0;
-	return  context->State->Input.KeysPressed[key];
-}
-b32 Wish::Wish_Input_IsKeyReleased(u32 key)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (key >= WISH_INPUT_MAX_KEYS)
-		return 0;
-	return  context->State->Input.KeysReleased[key];
-}
+	void Wish_Engine_SetApp(wish_engine_callback app)
+	{
+		CONTEXT_CHECK;
+		context->Callback = app;
+		if (context->Callback.OnInit) {
+			context->Callback.OnInit();
+		}
+	}
 
-i32 Wish::Wish_Input_GetMouseX()
-{
-	CONTEXT_CHECK;
-	return context->State->Input.MouseX;
-}
-i32 Wish::Wish_Input_GetMouseY()
-{
-	CONTEXT_CHECK;
-	return context->State->Input.MouseY;
-}
+	//Input
+	//Input
+	b32 Wish_Input_IsKeyDown(u32 key)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (key >= WISH_INPUT_MAX_KEYS)
+			return 0;
+		return  context->State->Input.KeysDown[key];
+	}
+	b32 Wish_Input_IsKeyPressed(u32 key)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (key >= WISH_INPUT_MAX_KEYS)
+			return 0;
+		return  context->State->Input.KeysPressed[key];
+	}
+	b32 Wish_Input_IsKeyReleased(u32 key)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (key >= WISH_INPUT_MAX_KEYS)
+			return 0;
+		return  context->State->Input.KeysReleased[key];
+	}
 
-i32 Wish::Wish_Input_GetMouseDX()
-{
-	CONTEXT_CHECK;
-	return context->State->Input.MouseDX;
-}
-i32 Wish::Wish_Input_GetMouseDY()
-{
-	CONTEXT_CHECK;
-	return context->State->Input.MouseDY;
-}
+	i32 Wish_Input_GetMouseX()
+	{
+		CONTEXT_CHECK;
+		return context->State->Input.MouseX;
+	}
+	i32 Wish_Input_GetMouseY()
+	{
+		CONTEXT_CHECK;
+		return context->State->Input.MouseY;
+	}
 
-b32 Wish::Wish_Input_IsMouseDown(u32 mb)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (mb >= WISH_INPUT_MAX_BUTTONS)
-		return 0;
-	return  context->State->Input.MouseButtonsDown[mb];
-}
-b32 Wish::Wish_Input_IsMousePressed(u32 mb)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (mb >= WISH_INPUT_MAX_BUTTONS)
-		return 0;
-	return  context->State->Input.MouseButtonsPressed[mb];
-}
+	i32 Wish_Input_GetMouseDX()
+	{
+		CONTEXT_CHECK;
+		return context->State->Input.MouseDX;
+	}
+	i32 Wish_Input_GetMouseDY()
+	{
+		CONTEXT_CHECK;
+		return context->State->Input.MouseDY;
+	}
 
-b32 Wish::Wish_Input_IsMouseReleased(u32 mb)
-{
-	CONTEXT_CHECK;
-	//Key bounds check
-	if (mb >= WISH_INPUT_MAX_BUTTONS)
-		return 0;
-	return  context->State->Input.MouseButtonsReleased[mb];
-}
+	b32 Wish_Input_IsMouseDown(u32 mb)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (mb >= WISH_INPUT_MAX_BUTTONS)
+			return 0;
+		return  context->State->Input.MouseButtonsDown[mb];
+	}
+	b32 Wish_Input_IsMousePressed(u32 mb)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (mb >= WISH_INPUT_MAX_BUTTONS)
+			return 0;
+		return  context->State->Input.MouseButtonsPressed[mb];
+	}
 
-wish_platform* Wish::Wish_Engine_GetPlatform()
-{
-	CONTEXT_CHECK;
-	return &context->State->Platform;
-}
+	b32 Wish_Input_IsMouseReleased(u32 mb)
+	{
+		CONTEXT_CHECK;
+		//Key bounds check
+		if (mb >= WISH_INPUT_MAX_BUTTONS)
+			return 0;
+		return  context->State->Input.MouseButtonsReleased[mb];
+	}
 
-wish_engine_context* Wish::Wish_Engine_GetContext()
-{
-	CONTEXT_CHECK;
-	return context;
-}
+	wish_platform* Wish_Engine_GetPlatform()
+	{
+		CONTEXT_CHECK;
+		return &context->State->Platform;
+	}
 
-i32 Wish::Wish_Window_GetWidth() {
-	CONTEXT_CHECK;
-	return context->State->Window.Width;
-}
+	wish_engine_context* Wish_Engine_GetContext()
+	{
+		CONTEXT_CHECK;
+		return context;
+	}
 
-i32 Wish::Wish_Window_GetHeight() {
-	CONTEXT_CHECK;
-	return context->State->Window.Height;
-}
+	i32 Wish_Window_GetWidth() {
+		CONTEXT_CHECK;
+		return context->State->Window.Width;
+	}
 
-r32 Wish::Wish_Window_GetAspect() {
-	CONTEXT_CHECK;
-	return context->State->Window.Aspect;
+	i32 Wish_Window_GetHeight() {
+		CONTEXT_CHECK;
+		return context->State->Window.Height;
+	}
+
+	r32 Wish_Window_GetAspect() {
+		CONTEXT_CHECK;
+		return context->State->Window.Aspect;
+	}
+
 }
 
 void EngineInitialize(wish_game_state* state, wish_game_memory* memory)
@@ -206,6 +210,3 @@ __Wish_Export _Def_Wish_Engine_OnFrame(_Wish_Engine_OnFrame)
 	//Flush the frame!
 	Wish_Renderer_Flush();
 }
-
-
-

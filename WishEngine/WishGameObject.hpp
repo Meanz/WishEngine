@@ -2,33 +2,16 @@
 
 namespace Wish
 {
-	struct wish_game_object
+
+	class WishGameObject : public WishTransform
 	{
-		wish_transform Transform;
 
-		//
-		Wish_Void_Func OnFixedUpdate;
-		Wish_Void_Func OnUpdate;
-		Wish_Void_Func OnDraw;
+	public:
+		__Wish_Export WishGameObject(const char* name);
+		__Wish_Export ~WishGameObject();
 
-		//For class suport
-		void* Obj;
-		Wish_Class_Func cOnFixedUpdate;
-		Wish_Class_Func cOnUpdate;
-		Wish_Class_Func cOnDraw;
+		__Wish_Export virtual void OnUpdate() {};
+		__Wish_Export virtual void OnFixedUpdate() {};
+		__Wish_Export virtual void OnDraw() {};
 	};
-
-#define WISH_GEOMETRY_MAX_MESHES 50
-
-	struct wish_geometry
-	{
-		wish_transform Transform;
-		wish_mesh* Meshes[WISH_GEOMETRY_MAX_MESHES];
-		wish_material Material;
-	};
-
-
-	__Wish_Export void Wish_Geometry_AddMesh(wish_geometry* geometry, wish_mesh* mesh);
-	void Wish_Geometry_Draw(wish_geometry* geometry);
-
 }

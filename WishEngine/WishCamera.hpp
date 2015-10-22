@@ -5,24 +5,21 @@
 namespace Wish
 {
 
-	struct wish_camera
+	class wish_camera : public WishTransform
 	{
-		wish_transform Transform;
+
+	public:
+		__Wish_Export wish_camera();
+		__Wish_Export ~wish_camera();
+
 		mat4 Projection;
 		mat4 View;
 		mat4 ViewProjection;
+
+		__Wish_Export void Perspective(r32 fovY, r32 aspect, r32 zNear, r32 zFar);
+		__Wish_Export void Ortho(r32 left, r32 right, r32 top, r32 bottom, r32 zNear, r32 zFar);
+		__Wish_Export void CalculateViewMatrix();
+		__Wish_Export void ApplyImmediate();
 	};
-
-	__Wish_Export void Wish_Camera_Perspective(wish_camera* camera, float fovY, float aspect, float zNear, float zFar);
-	__Wish_Export void Wish_Camera_Ortho2D(wish_camera* camera, float left, float right, float top, float bottom, float zNear, float zFar);
-
-	//void LookAt(vec3 eye, vec3 target, vec3 up);
-	__Wish_Export void Wish_Camera_CalculateViewMatrix(wish_camera* camera);
-
-	//Apply this camera as immediate
-	__Wish_Export void Wish_Camera_ApplyImmediate(wish_camera* camera);
-
-	__Wish_Export void Wish_Camera_LookAt(wish_camera* camera, vec3 eye, vec3 center);
-
 
 };

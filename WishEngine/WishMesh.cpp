@@ -1,84 +1,143 @@
 #include "stdafx.h"
-#include "WishCore.h"
+#include "Wish.hpp"
 #include "WishMesh.hpp"
 
-void Wish::Wish_Mesh_SetVertices(wish_mesh* mesh, GLfloat* vertices, GLuint numVertices, GLuint vertexSize) {
-	mesh->m_pVertices = vertices;
-	mesh->m_NumVertices = numVertices;
-	mesh->m_VertexSize = vertexSize;
-}
+namespace Wish
+{
 
-void Wish::Wish_Mesh_SetIndices(wish_mesh* mesh, GLuint* indices, GLuint numIndices) {
-	mesh->m_pIndices = indices;
-	mesh->m_NumIndices = numIndices;
-	mesh->m_IsCompiled = false; //Setting indices will destroy our drawcall, so make sure to flag this as not compiled
-}
-
-void Wish::Wish_Mesh_DeleteBuffers(wish_mesh* mesh) {
-	if (mesh->m_VAO != 0)
+	wish_mesh::wish_mesh()
 	{
-		glDeleteVertexArrays(1, &mesh->m_VAO);
+		//Default to vnt
+		MeshType = WISH_VERTEX_VNT;
 	}
-	for (int i = 0; i < MAX_BUFFERS; i++) {
-		if (mesh->m_Buffers[i] != 0)
+
+	wish_mesh::~wish_mesh()
+	{
+		DeleteBuffers();
+	}
+
+	void wish_mesh::SetVertices(r32* vertices, u32 numVertices, u32 vertexSize)
+	{
+		Vertices = vertices;
+		NumVertices = numVertices;
+		VertexSize = vertexSize;
+	}
+
+	void wish_mesh::SetIndices(u32* indices, u32 numIndices)
+	{
+		Indices = indices;
+		NumIndices = numIndices;
+		IsCompiled = false; //Setting indices will destroy our drawcall, so make sure to flag this as not compiled
+	}
+
+	void wish_mesh::DeleteBuffers()
+	{
+		//Delete stuff if it exists
+		if (VAO != 0)
 		{
-			glDeleteBuffers(1, &mesh->m_Buffers[i]);
+			glDeleteVertexArrays(1, &VAO);
+		}
+		for (int i = 0; i < MAX_BUFFERS; i++) {
+			if (Buffers[i] != 0)
+			{
+				glDeleteBuffers(1, &Buffers[i]);
+			}
+		}
+		if (IBO != 0)
+		{
+			glDeleteBuffers(1, &IBO);
 		}
 	}
-}
 
-void Wish::Wish_Mesh_Compile(wish_mesh* mesh) {
-	Wish_Mesh_DeleteBuffers(mesh);
-
-	//Generate the buffers
-	//Needs information about how to compile? 
-	//For now let's just make one buffer per thingy
-
-	glGenVertexArrays(1, &mesh->m_VAO);
-	glBindVertexArray(mesh->m_VAO);
+	b32 wish_mesh::Compile()
 	{
-		glGenBuffers(1, mesh->m_Buffers);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->m_Buffers[0]);
+		DeleteBuffers();
 
-		//Buffer the data I assume?
-		glBufferData(
-			GL_ARRAY_BUFFER,
-			(GLsizeiptr)(mesh->m_NumVertices * mesh->m_VertexSize),
-			(void*)mesh->m_pVertices,
-			GL_STATIC_DRAW);
+		//Generate the buffers
+		//Needs information about how to compile? 
+		//For now let's just make one buffer per thingy
 
-		//Assumption is VNT
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, mesh->m_VertexSize, (void*)0);
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+		{
+			glGenBuffers(1, Buffers);
+			glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, mesh->m_VertexSize, (void*)(3 * sizeof(GLfloat)));
+			//Buffer the data I assume?
+			glBufferData(
+				GL_ARRAY_BUFFER,
+				(GLsizeiptr)(NumVertices* VertexSize),
+				(void*)Vertices,
+				GL_STATIC_DRAW);
 
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, mesh->m_VertexSize, (void*)(6 * sizeof(GLfloat)));
+			//Assumption is VNT
+			if (MeshType == WISH_VERTEX_VNT)
+			{
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)0);
 
-		glGenBuffers(1, &mesh->m_IBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->m_IBO);
+				glEnableVertexAttribArray(1);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
 
-		glBufferData(
-			GL_ELEMENT_ARRAY_BUFFER,
-			(GLsizeiptr)(mesh->m_NumIndices * sizeof(GLuint)),
-			(void*)mesh->m_pIndices,
-			GL_STATIC_DRAW);
+				glEnableVertexAttribArray(2);
+				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VertexSize, (void*)(6 * sizeof(GLfloat)));
+			}
+			else if (MeshType == WISH_VERTEX_VNTBW)
+			{
+				//Position
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)0);
+
+				//Normal
+				glEnableVertexAttribArray(1);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
+
+				//UV
+				glEnableVertexAttribArray(2);
+				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VertexSize, (void*)(6 * sizeof(GLfloat)));
+
+				//Bones
+				glEnableVertexAttribArray(3);
+				glVertexAttribPointer(3, 4, GL_INT, GL_FALSE, VertexSize, (void*)(8 * sizeof(GLfloat)));
+
+				//Weights
+				glEnableVertexAttribArray(3);
+				glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, VertexSize, (void*)(8 * sizeof(GLfloat) + 4 * sizeof(GLint)));
+			}
+
+			glGenBuffers(1, &IBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+			glBufferData(
+				GL_ELEMENT_ARRAY_BUFFER,
+				(GLsizeiptr)(NumIndices * sizeof(GLuint)),
+				(void*)Indices,
+				GL_STATIC_DRAW);
+		}
+		glBindVertexArray(0);
+
+		IsCompiled = true; //Flag as compiled
+		return IsCompiled;
 	}
-	glBindVertexArray(0);
 
-	mesh->m_IsCompiled = true; //Flag as compiled
-}
-
-void Wish::Wish_Mesh_Draw(wish_mesh* mesh) {
-	if (!mesh->m_IsCompiled) {
-		ASSERT(false);
-	}
-
-	glBindVertexArray(mesh->m_VAO);
+	void wish_mesh::Draw()
 	{
-		glDrawElements(GL_TRIANGLES, mesh->m_NumIndices, GL_UNSIGNED_INT, 0);
+		if (!IsCompiled) {
+			ASSERT(false);
+		}
+
+		glBindVertexArray(VAO);
+		{
+			glDrawElements(GL_TRIANGLES, NumIndices, GL_UNSIGNED_INT, 0);
+		}
+		glBindVertexArray(0);
 	}
-	glBindVertexArray(0);
+
+	wish_mesh* Wish_Mesh_Create()
+	{
+		void* mem = Wish_Memory_Alloc(sizeof(wish_mesh));
+		//Zero mem?
+		wish_mesh* mesh = new (mem)wish_mesh();
+		return mesh;
+	}
 }

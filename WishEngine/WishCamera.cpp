@@ -3,29 +3,42 @@
 #include "WishTransform.hpp"
 #include "WishCamera.hpp"
 
-void Wish::Wish_Camera_Perspective(wish_camera* camera, float fovY, float aspect, float zNear, float zFar)
+namespace Wish
 {
-	camera->Projection = glm::perspective(fovY, aspect, zNear, zFar);
-}
-void Wish::Wish_Camera_Ortho2D(wish_camera* camera, float left, float right, float top, float bottom, float zNear, float zFar)
-{
-	camera->Projection = glm::ortho(left, right, bottom, top, zNear, zFar);
-}
-void Wish::Wish_Camera_CalculateViewMatrix(wish_camera* camera) 
-{
-	camera->View = *Wish_Transform_CalculateGlobal(&camera->Transform, mat4(1.0f));
-}
-void Wish::Wish_Camera_ApplyImmediate(wish_camera* camera)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glLoadMatrixf(value_ptr(camera->Projection));
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glLoadMatrixf(value_ptr(camera->View));
-}
 
-void Wish::Wish_Camera_LookAt(wish_camera* camera, vec3 eye, vec3 center) 
-{
-	Wish_Transform_LookAt(&camera->Transform, eye, center, vec3(0.0f, 1.0f, 0.0f));
+	wish_camera::wish_camera() : WishTransform("Camera")
+	{
+
+	}
+
+	wish_camera::~wish_camera()
+	{
+
+	}
+
+	void wish_camera::Perspective(r32 fovY, r32 aspect, r32 zNear, r32 zFar)
+	{
+		Projection = glm::perspective(fovY, aspect, zNear, zFar);
+	}
+
+	void wish_camera::Ortho(r32 left, r32 right, r32 top, r32 bottom, r32 zNear, r32 zFar)
+	{
+		Projection = glm::ortho(left, right, bottom, top, zNear, zFar);
+	}
+
+	void wish_camera::CalculateViewMatrix()
+	{
+		View = CalculateGlobal(mat4(1.0f));
+	}
+
+	void wish_camera::ApplyImmediate()
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glLoadMatrixf(value_ptr(Projection));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glLoadMatrixf(value_ptr(View));
+	}
+
 }

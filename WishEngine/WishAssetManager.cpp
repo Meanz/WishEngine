@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 //Mandatory include?
-#include "Wish.hpp"
+#include "Wish.h"
 #include "WishAssetManager.hpp"
 
 class UpdateListener : public FW::FileWatchListener

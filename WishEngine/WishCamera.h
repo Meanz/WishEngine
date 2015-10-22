@@ -5,7 +5,7 @@
 namespace Wish
 {
 
-	class wish_camera : public WishTransform
+	class wish_camera : public wish_transform
 	{
 
 	public:

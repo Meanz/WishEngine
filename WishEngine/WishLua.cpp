@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "WishLua.h"
-#include "Wish.hpp"
+#include "Wish.h"
 
 namespace Wish
 {

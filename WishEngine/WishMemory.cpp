@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Wish.hpp"
-#include "WishMemory.hpp"
+#include "Wish.h"
+#include "WishMemory.h"
 
 void Wish::Wish_Memory_Zero(void* what)
 {

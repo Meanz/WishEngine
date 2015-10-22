@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <sstream>
 #include <vector>
-#include "Wish.hpp"
+#include "Wish.h"
 #include "WishIO.hpp"
 #include "WishOBJLoader.hpp"
 

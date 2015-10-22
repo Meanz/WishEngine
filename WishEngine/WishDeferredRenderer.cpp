@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Wish.hpp"
+#include "Wish.h"
 #include "WishDeferredRenderer.h"
 
 namespace Wish
@@ -56,7 +56,7 @@ namespace Wish
 
 		//Scene rendering
 		for (size_t i = 0; i < renderer.NumGeometries; i++) {
-			WishGeometry* pGameObject = renderer.GeometryPassQueue[i];
+			wish_geometry* pGameObject = renderer.GeometryPassQueue[i];
 			{
 				pGameObject->Draw();
 			}

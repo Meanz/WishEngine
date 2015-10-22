@@ -2,8 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "Wish.hpp"
-#include "WishEngine.hpp"
+#include "Wish.h"
+#include "WishEngine.h"
 
 #define CONTEXT_CHECK ASSERT((context != NULL))
 

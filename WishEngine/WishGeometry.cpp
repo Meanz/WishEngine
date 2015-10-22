@@ -1,26 +1,23 @@
-#include "stdafx.h"
-#include "Wish.hpp"
-#include "WishGeometry.h"
 
 namespace Wish
 {
 
-	WishGeometry::WishGeometry(const char* name) : WishTransform(name)
+	wish_geometry::wish_geometry(const char* name) : wish_transform(name)
 	{
 		TransformType = WISH_TRANSFORM_TYPE_GEOMETRY;
 	}
 
-	WishGeometry::~WishGeometry()
+	wish_geometry::~wish_geometry()
 	{
 
 	}
 
-	void WishGeometry::AddMesh(wish_mesh* mesh)
+	void wish_geometry::AddMesh(wish_mesh* mesh)
 	{
 		Meshes[0] = mesh;
 	}
 
-	void WishGeometry::Draw()
+	void wish_geometry::Draw()
 	{
 		//Okay, we are getting a drawcall from the renderer
 		//Make us of it

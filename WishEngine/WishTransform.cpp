@@ -1,11 +1,8 @@
-#include "stdafx.h"
-#include "WishCore.h"
-#include "WishTransform.hpp"
 
 namespace Wish
 {
 
-	WishTransform::WishTransform(const char* name)
+	wish_transform::wish_transform(const char* name)
 	{
 		this->Scale = vec3(1.0f);
 		this->Rotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
@@ -18,9 +15,9 @@ namespace Wish
 		SetName(name);
 	}
 
-	WishTransform::WishTransform() : WishTransform("Null") {}
+	wish_transform::wish_transform() : wish_transform("Null") {}
 
-	WishTransform::~WishTransform()
+	wish_transform::~wish_transform()
 	{
 		//Detatch this thing if it exists
 		if (Parent != NULL)
@@ -28,7 +25,7 @@ namespace Wish
 			//Attach all children to my parent?
 			if (Child != NULL)
 			{
-				WishTransform* child = Child;
+				wish_transform* child = Child;
 				while (child != NULL)
 				{
 					//TODO(Meanzie): Attach these to my parent?
@@ -45,10 +42,10 @@ namespace Wish
 		}
 	}
 
-	b32 WishTransform::HasChild(WishTransform* child)
+	b32 wish_transform::HasChild(wish_transform* child)
 	{
 		bool result = false;
-		WishTransform* firstChild = Child;
+		wish_transform* firstChild = Child;
 		if (firstChild)
 		{
 			while (firstChild != NULL)
@@ -63,18 +60,18 @@ namespace Wish
 		return result;
 	}
 
-	void WishTransform::SetName(const char* name)
+	void wish_transform::SetName(const char* name)
 	{
 		if (strlen(name) < WISH_TRANSFORM_NAME_SIZE) {
 			strcpy_s(Name, name);
 		}
 	}
 
-	WishTransform* WishTransform::GetLastChild()
+	wish_transform* wish_transform::GetLastChild()
 	{
 		if (Child)
 		{
-			WishTransform* it = Child;
+			wish_transform* it = Child;
 			while (it->Next != NULL)
 			{
 				it = it->Next;
@@ -84,7 +81,7 @@ namespace Wish
 		return NULL;
 	}
 
-	void WishTransform::Attach(WishTransform* other) 
+	void wish_transform::Attach(wish_transform* other)
 	{
 		//Attach us to the last child
 		if (!Child)
@@ -97,7 +94,7 @@ namespace Wish
 		}
 		else
 		{
-			WishTransform* lastChild = GetLastChild();
+			wish_transform* lastChild = GetLastChild();
 			if (lastChild) {
 				lastChild->Next = other;
 				other->Parent = lastChild->Parent;
@@ -111,7 +108,7 @@ namespace Wish
 		}
 	}
 
-	void WishTransform::Detach(WishTransform* other) 
+	void wish_transform::Detach(wish_transform* other)
 	{
 		if (HasChild(other))
 		{
@@ -136,20 +133,20 @@ namespace Wish
 		}
 	}
 
-	mat4& WishTransform::CalculateLocal()
+	mat4& wish_transform::CalculateLocal()
 	{
 		Local = mat4_cast(Rotation) * glm::translate(mat4(1.0f), Position) * glm::scale(mat4(1.0f), Scale);
 		return Local;
 	}
 
-	mat4& WishTransform::CalculateGlobal(mat4& parent) 
+	mat4& wish_transform::CalculateGlobal(mat4& parent)
 	{
 		CalculateLocal();
 		Global = parent * Local;
 		return Global;
 	}
 
-	void WishTransform::LookAt(v3 eye, v3 center, v3 up)
+	void wish_transform::LookAt(v3 eye, v3 center, v3 up)
 	{
 		mat4 lookat_matrix = glm::lookAt(eye, center, up);
 		this->Rotation = quat(lookat_matrix);

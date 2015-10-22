@@ -1,5 +1,4 @@
 #pragma once
-#include "WishMemory.hpp"
 
 using namespace Wish;
 

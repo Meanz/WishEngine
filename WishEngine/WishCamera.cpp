@@ -1,12 +1,8 @@
-#include "stdafx.h"
-#include "WishCore.h"
-#include "WishTransform.hpp"
-#include "WishCamera.hpp"
 
 namespace Wish
 {
 
-	wish_camera::wish_camera() : WishTransform("Camera")
+	wish_camera::wish_camera() : wish_transform("Camera")
 	{
 
 	}

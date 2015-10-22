@@ -73,7 +73,7 @@ namespace Wish
 #define WISH_MAX_LIGHT_QUEUE_SIZE 128
 
 		u32 NumGeometries;
-		WishGeometry* GeometryPassQueue[WISH_MAX_GEOMETRY_QUEUE_SIZE];
+		wish_geometry* GeometryPassQueue[WISH_MAX_GEOMETRY_QUEUE_SIZE];
 
 		u32 NumLights;
 		wish_light* LighPassQueue[WISH_MAX_LIGHT_QUEUE_SIZE];
@@ -107,7 +107,7 @@ namespace Wish
 	GLuint Wish_Renderer_GetWidth();
 	GLuint Wish_Renderer_GetHeight();
 
-	void Wish_Renderer_Submit(WishGeometry* geometry);
+	void Wish_Renderer_Submit(wish_geometry* geometry);
 	void Wish_Renderer_Submit(wish_light* light);
 
 	void Wish_Renderer_BindTexture(GLuint textureSlot, wish_texture* pTexture);

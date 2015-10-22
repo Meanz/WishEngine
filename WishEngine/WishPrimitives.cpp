@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Wish.hpp"
+#include "Wish.h"
 #include "WishPrimitives.h"
 
 namespace Wish

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Wish.hpp"
+#include "Wish.h"
 #include "WishRenderer.hpp"
 #include "WishPrimitives.h"
 #include "WishOBJLoader.hpp"
@@ -103,7 +103,7 @@ GLuint Wish::Wish_Renderer_GetHeight() {
 
 namespace Wish
 {
-	void Wish_Renderer_Submit(WishGeometry* geometry) {
+	void Wish_Renderer_Submit(wish_geometry* geometry) {
 		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
 		renderer.GeometryPassQueue[renderer.NumGeometries++] = geometry;
 	}
@@ -234,7 +234,7 @@ void Wish::Wish_Renderer_Flush() {
 
 			//Process render queue
 			for (size_t i = 0; i < renderer.NumGeometries; i++) {
-				WishGeometry* pGameObject = renderer.GeometryPassQueue[i];
+				wish_geometry* pGameObject = renderer.GeometryPassQueue[i];
 				{
 					pGameObject->Draw();
 				}

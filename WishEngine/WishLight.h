@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "WishGameObject.hpp"
+#include "WishGameObject.h"
 
 namespace Wish
 {
@@ -12,7 +12,7 @@ namespace Wish
 		LIGHT_SPOTLIGHT
 	};
 
-	class wish_light : public WishTransform
+	class wish_light : public wish_transform
 	{
 	public:
 		wish_light(const char* name);

@@ -1,28 +1,34 @@
 #include "stdafx.h"
-#include "Wish.hpp"
-#include "WishScene.hpp"
+#include "Wish.h"
+#include "WishCore.h"
+
+#include "WishTransform.cpp"
+#include "WishGameObject.cpp"
+#include "WishGeometry.cpp"
+#include "WishLight.cpp"
+#include "WishCamera.cpp"
 
 namespace Wish
 {
 
-	WishGameObject* Wish_Scene_NewGameObject(const char* name) {
-		void* mem = malloc(sizeof(WishGameObject));
-		Wish_Memory_Zero(mem, sizeof(WishGameObject));
-		WishGameObject* wgo = new (mem)WishGameObject(name);
+	wish_game_object* Wish_Scene_NewGameObject(const char* name) {
+		void* mem = malloc(sizeof(wish_game_object));
+		Wish_Memory_Zero(mem, sizeof(wish_game_object));
+		wish_game_object* wgo = new (mem)wish_game_object(name);
 		return wgo;
 	}
 
-	WishTransform* Wish_Scene_NewTransform(const char* name) {
-		void* mem = malloc(sizeof(WishTransform));
-		Wish_Memory_Zero(mem, sizeof(WishTransform));
-		WishTransform* wt = new (mem)WishTransform(name);
+	wish_transform* Wish_Scene_NewTransform(const char* name) {
+		void* mem = malloc(sizeof(wish_transform));
+		Wish_Memory_Zero(mem, sizeof(wish_transform));
+		wish_transform* wt = new (mem)wish_transform(name);
 		return wt;
 	}
 
-	WishGeometry* Wish_Scene_NewGeometry(const char* name) {
-		void* mem = malloc(sizeof(WishGeometry));
-		Wish_Memory_Zero(mem, sizeof(WishGeometry));
-		WishGeometry* wt = new (mem)WishGeometry(name);
+	wish_geometry* Wish_Scene_NewGeometry(const char* name) {
+		void* mem = malloc(sizeof(wish_geometry));
+		Wish_Memory_Zero(mem, sizeof(wish_geometry));
+		wish_geometry* wt = new (mem)wish_geometry(name);
 		return wt;
 	}
 
@@ -53,7 +59,7 @@ void Wish::Wish_Scene_Init()
 	scene.Camera.ViewProjection = mat4(1.0f);
 }
 
-WishTransform* Wish::Wish_Scene_GetRoot()
+wish_transform* Wish::Wish_Scene_GetRoot()
 {
 	wish_scene_context& scene = Wish_Engine_GetContext()->Scene;
 	return scene.Root;
@@ -66,14 +72,14 @@ wish_camera* Wish::Wish_Scene_GetCamera()
 }
 
 int recurDepth = 0;
-void ProcessNode(WishTransform* pTransform){
+void ProcessNode(wish_transform* pTransform){
 
 	wish_engine_context* ex = Wish_Engine_GetContext();
 	int i = 0;
 	if (pTransform->TransformType == wish_transform_type::WISH_TRANSFORM_TYPE_GEOMETRY) {
 
 		//
-		WishGeometry* geometry = (WishGeometry*)pTransform;
+		wish_geometry* geometry = (wish_geometry*)pTransform;
 
 		//Push the geometry to the renderer
 		Wish_Renderer_Submit(geometry);
@@ -84,7 +90,7 @@ void ProcessNode(WishTransform* pTransform){
 		Wish_Renderer_Submit(light);
 	}
 	else if (pTransform->TransformType == wish_transform_type::WISH_TRANSFORM_TYPE_GAME_OBJECT) {
-		WishGameObject* gameObject = (WishGameObject*)pTransform;
+		wish_game_object* gameObject = (wish_game_object*)pTransform;
 		//Perform transform update
 		//Perform fixed update
 		gameObject->OnUpdate();
@@ -92,7 +98,7 @@ void ProcessNode(WishTransform* pTransform){
 		gameObject->OnDraw();
 	}
 	//Pass the rendering processing down to our children
-	WishTransform* it = pTransform->Child;
+	wish_transform* it = pTransform->Child;
 	if (it)
 	{
 		//This will loop everything and break when it is parent

@@ -93,29 +93,14 @@
     <ClInclude Include="WishMaterial.hpp">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="WishScene.hpp">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="WishGameObject.hpp">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="WishRenderer.hpp">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="WishTexture.hpp">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="WishMemory.hpp">
-      <Filter>Header Files\Engine\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="WishIO.hpp">
       <Filter>Header Files\Engine\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="WishCamera.hpp">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="WishEngine.hpp">
-      <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="WishFramebuffer.hpp">
       <Filter>Header Files\Engine\Render</Filter>
@@ -126,9 +111,6 @@
     <ClInclude Include="WishOBJLoader.hpp">
       <Filter>Header Files\Engine\IO</Filter>
     </ClInclude>
-    <ClInclude Include="WishLight.hpp">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Murmur3.hpp">
       <Filter>Header Files\Engine\IO</Filter>
     </ClInclude>
@@ -138,13 +120,7 @@
     <ClInclude Include="WishScancode.h">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="WishTransform.hpp">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="WishTypes.h">
-      <Filter>Header Files\Engine\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="Wish.hpp">
       <Filter>Header Files\Engine\Types</Filter>
     </ClInclude>
     <ClInclude Include="WishCore.h">
@@ -184,6 +160,30 @@
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="WishGeometry.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishTransform.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishGameObject.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishCamera.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishScene.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishMemory.h">
+      <Filter>Header Files\Engine\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="WishEngine.h">
+      <Filter>Header Files\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Wish.h">
+      <Filter>Header Files\Engine\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="WishLight.h">
       <Filter>Header Files\Engine\Scene</Filter>
     </ClInclude>
   </ItemGroup>

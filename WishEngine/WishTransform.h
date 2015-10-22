@@ -22,7 +22,7 @@ namespace Wish
 	};
 
 	/* Example C++ Impl */
-	class WishTransform
+	class wish_transform
 	{
 	public:
 		char Name[WISH_TRANSFORM_NAME_SIZE];
@@ -36,23 +36,23 @@ namespace Wish
 		wish_transform_type TransformType;
 
 		//Circular Hierarchy
-		WishTransform* Child;  //32
-		WishTransform* Parent; //32
-		WishTransform* Prev;	//32
-		WishTransform* Next;	//PTR, 32?
+		wish_transform* Child;  //32
+		wish_transform* Parent; //32
+		wish_transform* Prev;	//32
+		wish_transform* Next;	//PTR, 32?
 
 
-		WishTransform();
-		WishTransform(const char* name);
-		__Wish_Export ~WishTransform();
+		wish_transform();
+		wish_transform(const char* name);
+		__Wish_Export ~wish_transform();
 
 		void SetName(const char* name);
 
-		__Wish_Export b32 HasChild(WishTransform* child);
-		__Wish_Export WishTransform* GetLastChild();
+		__Wish_Export b32 HasChild(wish_transform* child);
+		__Wish_Export wish_transform* GetLastChild();
 
-		__Wish_Export void Attach(WishTransform* other);
-		__Wish_Export void Detach(WishTransform* other);
+		__Wish_Export void Attach(wish_transform* other);
+		__Wish_Export void Detach(wish_transform* other);
 
 		__Wish_Export mat4& CalculateLocal();
 		__Wish_Export mat4& CalculateGlobal(mat4& parent);

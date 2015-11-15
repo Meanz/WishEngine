@@ -1,10 +1,27 @@
 #pragma once
 
-//To be removed
+//
+#include "WishTexture.h"
+#include "WishShader.h"
+#include "WishMaterial.h"
+#include "WishMesh.h"
+
+//
+#include "WishFramebuffer.h"
+#include "WishDeferredRenderer.h"
+
+//
 #include "WishTiming.h"
+
+//
+#include "WishPrimitives.h"
 
 namespace Wish
 {
+
+	//Fwd decl
+	class wish_camera;
+	class wish_geometry;
 
 #define MAX_TEXTURES 8
 
@@ -14,7 +31,7 @@ namespace Wish
 		LIGHTING = 1,
 	};
 
-	struct GeometryBuffer
+	struct geometry_buffer
 	{
 		wish_framebuffer Framebuffer;
 		wish_texture Diffuse;
@@ -36,9 +53,9 @@ namespace Wish
 		vec3 kernel[KERNEL_SIZE];
 		bool isKernelDefined = false;
 
-		wish_camera* m_activeCamera;
-		bool m_bInit, m_DeferredRendering;
-		wish_shader_program* m_pCurrentShaderProgram;
+		wish_camera* ActiveCamera;
+		bool m_bInit, DeferredRendering;
+		wish_shader_program* CurrentShaderProgram;
 		wish_timer m_Timer;
 
 		wish_timer m_Timer_GBuffer;
@@ -48,7 +65,7 @@ namespace Wish
 
 
 		//DEF RENDERING
-		GeometryBuffer GeometryBuffer;
+		geometry_buffer GeometryBuffer;
 		wish_render_texture m_SSAOTexture;
 		wish_render_texture m_SSAOBlurredTexture;
 
@@ -57,14 +74,14 @@ namespace Wish
 
 		wish_shader_program* DeferredShader;
 		wish_shader_program* DeferredRenderingShader;
-		wish_shader_program* m_pSimpleShader;
-		wish_shader_program* m_pSimpleUnlitShader;
-		wish_shader_program* m_pSSAOShader;
-		wish_shader_program* m_pBlurShader;
+		wish_shader_program* SimpleShader;
+		wish_shader_program* SimpleUnlitShader;
+		wish_shader_program* SSAOShader;
+		wish_shader_program* BlurShader;
 
-		wish_shader_program* m_pPointLightShader;
-		wish_shader_program* m_pDirectionalLightShader;
-		wish_shader_program* m_pNullShader;
+		wish_shader_program* PointLightShader;
+		wish_shader_program* DirectionalLightShader;
+		wish_shader_program* NullShader;
 
 		wish_mesh* Rect;
 		wish_mesh* Sphere;
@@ -81,14 +98,11 @@ namespace Wish
 		//
 		wish_texture* m_BoundTextures[MAX_TEXTURES];
 
-		//Look into refercing and not copying!!
-		mat4 m_WorldMatrix;
-
 		//###############
 		//# PUBLIC VARS #
 		//###############
 		bool ShowSSAO, ShowTextures;
-		GLuint m_Width, m_Height;
+		GLuint Width, Height;
 
 	};
 

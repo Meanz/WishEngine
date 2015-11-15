@@ -37,20 +37,11 @@
     <Filter Include="Header Files\Engine\Render">
       <UniqueIdentifier>{8a0213d4-92dc-48c5-b15b-d57df62967d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Memory">
-      <UniqueIdentifier>{40b61c4a-c13c-40c7-b906-6be0613557c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Memory">
-      <UniqueIdentifier>{722f03b8-d27a-4cac-ba12-9d856ed40ae3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Engine\IO">
       <UniqueIdentifier>{0241ce5c-8d90-404c-8a52-3ad86d9f5081}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\IO">
       <UniqueIdentifier>{0c74387f-d866-4a48-88a8-4da5fc196857}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Render\gl">
-      <UniqueIdentifier>{4d4e52df-cfa3-47d3-a730-7cb10ca5755d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Engine\Debug">
       <UniqueIdentifier>{f165da62-21d3-4a37-85a9-5c551a85a09b}</UniqueIdentifier>
@@ -70,6 +61,30 @@
     <Filter Include="Header Files\Engine\Lua">
       <UniqueIdentifier>{21c58f17-326f-439c-b6f7-a69af37df7f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Render\OpenGL">
+      <UniqueIdentifier>{2b585dcb-4880-4b75-bbb3-13b11a6635ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Render\Direct3D11">
+      <UniqueIdentifier>{790a88cf-4724-4c70-8d8e-97a6eb0dae4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Render\OpenGL">
+      <UniqueIdentifier>{4d4e52df-cfa3-47d3-a730-7cb10ca5755d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Render\UI">
+      <UniqueIdentifier>{843d811c-114a-4485-8f36-629c81dd0534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Render\UI">
+      <UniqueIdentifier>{1b2ecc3c-9f8d-4a21-860f-792247e9a8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Lua">
+      <UniqueIdentifier>{1397fbd1-d0c6-4d90-ba9d-6e87c5f2293e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Asset">
+      <UniqueIdentifier>{60fe4c63-da29-4b9a-aa2d-391443bed8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Asset">
+      <UniqueIdentifier>{2e7c89db-191d-47fb-bb87-ab1346260482}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,49 +96,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WishMesh.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="WishShader.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
     <ClInclude Include="WishFrameInfo.hpp">
       <Filter>Header Files\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="WishMaterial.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="WishRenderer.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="WishTexture.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="WishIO.hpp">
       <Filter>Header Files\Engine\IO</Filter>
     </ClInclude>
-    <ClInclude Include="WishFramebuffer.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
     <ClInclude Include="WishFontRenderer.hpp">
       <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="WishOBJLoader.hpp">
-      <Filter>Header Files\Engine\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="Murmur3.hpp">
-      <Filter>Header Files\Engine\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="WishHash.hpp">
-      <Filter>Header Files\Engine\IO</Filter>
     </ClInclude>
     <ClInclude Include="WishScancode.h">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="WishTypes.h">
-      <Filter>Header Files\Engine\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="WishCore.h">
       <Filter>Header Files\Engine\Types</Filter>
     </ClInclude>
     <ClInclude Include="WishTiming.h">
@@ -142,9 +127,6 @@
       <Filter>Header Files\Engine\Lua</Filter>
     </ClInclude>
     <ClInclude Include="WishString.h">
-      <Filter>Header Files\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="WishAssetManager.hpp">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="WishPrimitives.h">
@@ -174,9 +156,6 @@
     <ClInclude Include="WishScene.h">
       <Filter>Header Files\Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="WishMemory.h">
-      <Filter>Header Files\Engine\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="WishEngine.h">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
@@ -186,16 +165,61 @@
     <ClInclude Include="WishLight.h">
       <Filter>Header Files\Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\TestApp\Wish_FPS_Camera.h">
+      <Filter>Header Files\Engine\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="WishMaterial.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishFramebuffer.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishRenderer.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishShader.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishTexture.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishMesh.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishOGLTexture.h">
+      <Filter>Header Files\Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="WishOGLShader.h">
+      <Filter>Header Files\Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="WishUIComponent.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishInput.h">
+      <Filter>Header Files\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="WishUI.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishAssetManager.hpp">
+      <Filter>Header Files\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="WishMemory.h">
+      <Filter>Header Files\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="WishOBJLoader.h">
+      <Filter>Header Files\Engine\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="WishHash.h">
+      <Filter>Header Files\Engine\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Murmur3.h">
+      <Filter>Header Files\Engine\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WishShader.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="WishMesh.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
     </ClCompile>
     <ClCompile Include="WishScene.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
@@ -203,23 +227,11 @@
     <ClCompile Include="WishGameObject.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="WishRenderer.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="WishTexture.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="WishMemory.cpp">
-      <Filter>Source Files\Engine\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="WishCamera.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="WishEngine.cpp">
       <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="WishFramebuffer.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
     </ClCompile>
     <ClCompile Include="WishIO.cpp">
       <Filter>Source Files\Engine\IO</Filter>
@@ -233,9 +245,6 @@
     <ClCompile Include="WishHash.cpp">
       <Filter>Source Files\Engine\IO</Filter>
     </ClCompile>
-    <ClCompile Include="WishLua.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="WishTransform.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
     </ClCompile>
@@ -246,9 +255,6 @@
       <Filter>Source Files\Engine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="WishString.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="WishAssetManager.cpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="WishPrimitives.cpp">
@@ -266,14 +272,53 @@
     <ClCompile Include="WishExports.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="WishDeferredRenderer.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
-    </ClCompile>
     <ClCompile Include="WishLight.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="WishGeometry.cpp">
       <Filter>Source Files\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLShader.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLTexture.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUIComponent.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WishInput.cpp">
+      <Filter>Source Files\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLRenderer.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLMaterial.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLDeferredRenderer.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLMesh.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUI.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WishLua.cpp">
+      <Filter>Source Files\Engine\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="WishAssetManager.cpp">
+      <Filter>Source Files\Engine\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="WishMemory.cpp">
+      <Filter>Source Files\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WishPlatform.cpp">
+      <Filter>Source Files\Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WishOGLFramebuffer.cpp">
+      <Filter>Source Files\Engine\Render\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

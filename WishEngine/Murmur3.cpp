@@ -8,7 +8,7 @@
 // non-native version will be less than optimal.
 
 #include "stdafx.h"
-#include "Murmur3.hpp"
+#include "Murmur3.h"
 
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros

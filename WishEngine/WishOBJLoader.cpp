@@ -2,8 +2,7 @@
 #include <sstream>
 #include <vector>
 #include "Wish.h"
-#include "WishIO.hpp"
-#include "WishOBJLoader.hpp"
+#include "WishOBJLoader.h"
 
 namespace Wish
 {

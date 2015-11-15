@@ -1,7 +1,9 @@
 #include "stdafx.h"
-#include "Wish.h"
-#include "WishCore.h"
 
+//All the types, the core
+#include "Wish.h"
+
+//All the scene sub elements
 #include "WishTransform.cpp"
 #include "WishGameObject.cpp"
 #include "WishGeometry.cpp"

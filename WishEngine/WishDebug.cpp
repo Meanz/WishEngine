@@ -1,3 +1,3 @@
 #include "stdafx.h"
-#include "WishCore.h"
+#include "Wish.h"
 #include "WishDebug.h"

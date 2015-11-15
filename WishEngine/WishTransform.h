@@ -43,7 +43,7 @@ namespace Wish
 
 
 		wish_transform();
-		wish_transform(const char* name);
+		__Wish_Export wish_transform(const char* name);
 		__Wish_Export ~wish_transform();
 
 		void SetName(const char* name);

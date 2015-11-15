@@ -1,11 +1,3 @@
-#include "stdafx.h"
-#include "Wish.h"
-#include "WishHash.hpp"
-#include "WishShader.hpp"
-
-//Special
-#include "WishIO.hpp"
-
 namespace Wish
 {
 	b32 Wish::Wish_Shader_Compile(wish_shader* shader)

@@ -1,7 +1,3 @@
-#include "stdafx.h"
-#include "Wish.h"
-#include "WishMesh.hpp"
-
 namespace Wish
 {
 

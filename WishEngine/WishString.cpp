@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WishCore.h"
+#include "Wish.h"
 #include "WishString.h"
 
 #include <stdarg.h> 

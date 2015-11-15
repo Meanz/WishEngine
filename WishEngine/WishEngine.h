@@ -1,5 +1,15 @@
 #pragma once
 
+#include "WishPlatform.h"
+#include "WishLua.h"
+
+//These two interact
+#include "WishRenderer.h"	//Renderer does not need things from scene?
+#include "WishScene.h"		//Scene needs things from renderer
+
+//Asset System
+#include "WishAssetManager.hpp"
+
 namespace Wish
 {
 
@@ -36,21 +46,6 @@ namespace Wish
 
 	//Pipe for app
 	__Wish_Export void Wish_Engine_SetApp(wish_engine_callback callback);
-
-	//Input
-	__Wish_Export b32 Wish_Input_IsKeyDown(u32 key);
-	__Wish_Export b32 Wish_Input_IsKeyPressed(u32 key);
-	__Wish_Export b32 Wish_Input_IsKeyReleased(u32 key);
-
-	__Wish_Export i32 Wish_Input_GetMouseX();
-	__Wish_Export i32 Wish_Input_GetMouseY();
-
-	__Wish_Export i32 Wish_Input_GetMouseDX();
-	__Wish_Export i32 Wish_Input_GetMouseDY();
-
-	__Wish_Export b32 Wish_Input_IsMouseDown(u32 mb);
-	__Wish_Export b32 Wish_Input_IsMousePressed(u32 mb);
-	__Wish_Export b32 Wish_Input_IsMouseReleased(u32 mb);
 
 	//This is scary stuff!?
 	__Wish_Export wish_platform* Wish_Engine_GetPlatform();

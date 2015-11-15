@@ -114,7 +114,7 @@ wish_texture* Wish::Wish_Asset_LoadTexture(const char* file)
 {
 	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
 	//Gen random name
-	return Wish_Asset_LoadTexture("tex_" + (assetManager.m_TexCounter++), file);
+	return Wish_Asset_LoadTexture("tex_", file);
 }
 
 wish_texture* Wish::Wish_Asset_LoadTexture(const char* id, const char* file)

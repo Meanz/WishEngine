@@ -1,11 +1,7 @@
-#include "stdafx.h"
-#include "Wish.h"
-#include "WishDeferredRenderer.h"
-
 namespace Wish
 {
 
-	void Wish_DeferredRenderer_Init(GeometryBuffer* geometryBuffer, u32 width, u32 height)
+	void Wish_DeferredRenderer_Init(geometry_buffer* geometryBuffer, u32 width, u32 height)
 	{
 		//Set up textures
 		Wish_Framebuffer_Create(&geometryBuffer->Framebuffer);
@@ -93,10 +89,10 @@ namespace Wish
 		glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
 		glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
 
-		Wish_Renderer_SetShaderProgram(renderer.m_pNullShader);
+		Wish_Renderer_SetShaderProgram(renderer.NullShader);
 		{
 			//Apply uniforms
-			Wish_Renderer_ApplyUniforms(renderer.m_pPointLightShader, nullptr, light);
+			Wish_Renderer_ApplyUniforms(renderer.PointLightShader, nullptr, light);
 
 			//Draw light
 			renderer.Sphere->Draw();
@@ -174,7 +170,7 @@ namespace Wish
 				if (pLight->LightType == LightType::LIGHT_POINT) {
 					float scalefactor = CalcPointLightBSphere((wish_point_light*)pLight);
 					//Fake position
-					renderer.m_WorldMatrix = glm::translate(mat4(1.0f), pLight->Position) * glm::scale(mat4(1.0f), vec3(scalefactor * 8));
+					renderer.WorldMatrix = glm::translate(mat4(1.0f), pLight->Position) * glm::scale(mat4(1.0f), vec3(scalefactor * 8));
 					StencilPass((wish_point_light*)pLight);
 					PointLightPass((wish_point_light*)pLight);
 				}
@@ -183,13 +179,13 @@ namespace Wish
 		Wish_Renderer_SetShaderProgram(NULL);
 
 		//## DSDirectionaLightPass();
-		Wish_Renderer_SetShaderProgram(renderer.m_pDirectionalLightShader);
+		Wish_Renderer_SetShaderProgram(renderer.DirectionalLightShader);
 		{
 			for (size_t i = 0; i < renderer.NumLights; i++) {
 				wish_light* pLight = renderer.LighPassQueue[i];
 				{
 					if (pLight->LightType == LightType::LIGHT_DIRECTIONAL) {
-						Wish_Renderer_ApplyUniforms(renderer.m_pDirectionalLightShader, nullptr, pLight);
+						Wish_Renderer_ApplyUniforms(renderer.DirectionalLightShader, nullptr, pLight);
 
 						//Draw light
 						renderer.Rect->Draw();
@@ -207,16 +203,16 @@ namespace Wish
 	void Wish_DeferredRenderer_DrawDebugTextures()
 	{
 		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
-		Wish_Renderer_SetShaderProgram(renderer.m_pSimpleUnlitShader);
+		Wish_Renderer_SetShaderProgram(renderer.SimpleUnlitShader);
 		{
 			//We need to set the world matrix
 			//Draw normal map
 			Wish_Renderer_BindTexture(0, &renderer.GeometryBuffer.Normals);
 
 			//Normals
-			renderer.m_WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, 0.75f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
-			Wish_Renderer_ApplyUniforms(renderer.m_pSimpleUnlitShader, nullptr, nullptr);
-			renderer.m_WorldMatrix = (mat4(1.0f));
+			renderer.WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, 0.75f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
+			Wish_Renderer_ApplyUniforms(renderer.SimpleUnlitShader, nullptr, nullptr);
+			renderer.WorldMatrix = (mat4(1.0f));
 
 			renderer.Rect->Draw();
 
@@ -225,27 +221,27 @@ namespace Wish
 			Wish_Renderer_BindTexture(0, &renderer.GeometryBuffer.Depth);
 
 			//Normals
-			renderer.m_WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, 0.25f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
-			Wish_Renderer_ApplyUniforms(renderer.m_pSimpleUnlitShader, nullptr, nullptr);
-			renderer.m_WorldMatrix = (mat4(1.0f));
+			renderer.WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, 0.25f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
+			Wish_Renderer_ApplyUniforms(renderer.SimpleUnlitShader, nullptr, nullptr);
+			renderer.WorldMatrix = (mat4(1.0f));
 
 			renderer.Rect->Draw();
 
 			//SSAO
 			Wish_Renderer_BindTexture(0, &renderer.m_SSAOTexture.Texture);
 
-			renderer.m_WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, -0.25f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
-			Wish_Renderer_ApplyUniforms(renderer.m_pSimpleUnlitShader, nullptr, nullptr);
-			renderer.m_WorldMatrix = (mat4(1.0f));
+			renderer.WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, -0.25f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
+			Wish_Renderer_ApplyUniforms(renderer.SimpleUnlitShader, nullptr, nullptr);
+			renderer.WorldMatrix = (mat4(1.0f));
 
 			renderer.Rect->Draw();
 
 			//SSAO Blurred
 			Wish_Renderer_BindTexture(0, &renderer.m_SSAOBlurredTexture.Texture);
 
-			renderer.m_WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, -0.75f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
-			Wish_Renderer_ApplyUniforms(renderer.m_pSimpleUnlitShader, nullptr, nullptr);
-			renderer.m_WorldMatrix = (mat4(1.0f));
+			renderer.WorldMatrix = glm::translate(mat4(1.0f), vec3(0.75f, -0.75f, 0.0f)) * glm::scale(mat4(1.0f), vec3(0.25f, 0.25f, 0.25f));
+			Wish_Renderer_ApplyUniforms(renderer.SimpleUnlitShader, nullptr, nullptr);
+			renderer.WorldMatrix = (mat4(1.0f));
 
 			renderer.Rect->Draw();
 		}

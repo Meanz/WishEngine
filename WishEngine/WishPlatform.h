@@ -1,5 +1,7 @@
 #pragma once
 
+#include "WishInput.h"
+
 using namespace Wish;
 
 struct wish_platform

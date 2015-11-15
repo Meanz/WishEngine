@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "WishCore.h"
-#include "WishHash.hpp"
-#include "Murmur3.hpp"
+#include "Wish.h"
+#include "WishHash.h"
+#include "Murmur3.h"
 
 namespace Wish
 {

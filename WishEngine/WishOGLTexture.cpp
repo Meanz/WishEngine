@@ -1,7 +1,3 @@
-#include "stdafx.h"
-#include "WishCore.h"
-#include "WishTexture.hpp"
-
 //This one is temp
 #include <SDL_image.h>
 

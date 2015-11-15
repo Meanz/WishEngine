@@ -1,11 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
-
-//Primitive Types, Wish should know about this
-#include "WishTexture.hpp"
-#include "WishShader.hpp"
-
 //This one is kind of unique
 #include "FileWatcher.h"
 

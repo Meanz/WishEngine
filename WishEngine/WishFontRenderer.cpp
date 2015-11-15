@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WishCore.h"
+#include "Wish.h"
 
 //FreeType Headers
 #include <ft2build.h>

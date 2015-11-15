@@ -11,20 +11,29 @@ namespace Wish
 
 	wish_string Wish_IO_ReadFileToString(const char* fileName)
 	{
-		wish_string str;
-	
-		//So here is the deal, I became sad, then I did this
+		FILE* file;
+		u32 fileLen;
+		wish_string result;
+		result.Handle = 0;
+		//Open file
+		fopen_s(&file, fileName, "rb");
+		if (file)
+		{
+			//Fetch file length
+			fseek(file, 0, SEEK_END);
+			fileLen = ftell(file);
+			fseek(file, 0, SEEK_SET);
 
-		std::string rfts = ReadFileToString(fileName);
-
-		//Then I was a it ashamed.
-		Wish_String_Alloc(&str, (rfts.size() * sizeof(u8))); //The entire file, + one byte for the null terminator
-
-		//But I looked the other way
-		str = rfts.c_str();
-
-		//And you know, I ended up getting there
-		return str;
+			Wish_String_Alloc(&result, fileLen + 1);
+			fread(Wish_CString(result), fileLen, 1, file);
+			Wish_CString(result)[fileLen] = 0; //Add null terminator
+			fclose(file);
+		}
+		else
+		{
+			printf("Unable to read %s.\n", fileName);
+		}
+		return result;
 	}
 
 	std::string ReadFileToString(const char* fileName) {

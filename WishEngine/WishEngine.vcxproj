@@ -86,25 +86,28 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\TestApp\Wish_FPS_Camera.h" />
     <ClInclude Include="WishAssetManager.hpp" />
-    <ClInclude Include="Murmur3.hpp" />
-    <ClInclude Include="WishCore.h" />
+    <ClInclude Include="Murmur3.h" />
     <ClInclude Include="WishDebug.h" />
     <ClInclude Include="WishDeferredRenderer.h" />
     <ClInclude Include="WishExports.h" />
     <ClInclude Include="WishGeometry.h" />
-    <ClInclude Include="WishHash.hpp" />
+    <ClInclude Include="WishHash.h" />
+    <ClInclude Include="WishInput.h" />
     <ClInclude Include="WishLight.h" />
     <ClInclude Include="Perlin.hpp" />
     <ClInclude Include="WishCamera.h" />
     <ClInclude Include="WishFontRenderer.hpp" />
-    <ClInclude Include="WishFramebuffer.hpp" />
+    <ClInclude Include="WishFramebuffer.h" />
     <ClInclude Include="WishGameObject.h" />
     <ClInclude Include="WishIO.hpp" />
     <ClInclude Include="WishLua.h" />
     <ClInclude Include="WishMemory.h" />
     <ClInclude Include="WishModel.h" />
-    <ClInclude Include="WishOBJLoader.hpp" />
+    <ClInclude Include="WishOBJLoader.h" />
+    <ClInclude Include="WishOGLShader.h" />
+    <ClInclude Include="WishOGLTexture.h" />
     <ClInclude Include="WishPlatform.h" />
     <ClInclude Include="WishPrimitives.h" />
     <ClInclude Include="WishScancode.h" />
@@ -115,32 +118,50 @@
     <ClInclude Include="WishTransform.h" />
     <ClInclude Include="WishEngine.h" />
     <ClInclude Include="WishFrameInfo.hpp" />
-    <ClInclude Include="WishMaterial.hpp" />
-    <ClInclude Include="WishMesh.hpp" />
-    <ClInclude Include="WishRenderer.hpp" />
-    <ClInclude Include="WishShader.hpp" />
-    <ClInclude Include="WishTexture.hpp" />
+    <ClInclude Include="WishMaterial.h" />
+    <ClInclude Include="WishMesh.h" />
+    <ClInclude Include="WishRenderer.h" />
+    <ClInclude Include="WishShader.h" />
+    <ClInclude Include="WishTexture.h" />
     <ClInclude Include="Wish.h" />
     <ClInclude Include="WishTiming.h" />
     <ClInclude Include="WishTypes.h" />
+    <ClInclude Include="WishUI.h" />
+    <ClInclude Include="WishUIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WishAssetManager.cpp" />
     <ClCompile Include="Murmur3.cpp" />
     <ClCompile Include="WishCore.cpp" />
     <ClCompile Include="WishDebug.cpp" />
-    <ClCompile Include="WishDeferredRenderer.cpp" />
+    <ClCompile Include="WishOGLDeferredRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishExports.cpp" />
     <ClCompile Include="WishGeometry.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="WishHash.cpp" />
+    <ClCompile Include="WishInput.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="WishModel.cpp" />
     <ClCompile Include="WishOBJLoader.cpp" />
-    <ClCompile Include="WishPrimitives.cpp" />
+    <ClCompile Include="WishOGLMaterial.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishOGLRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishPlatform.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishPrimitives.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishString.cpp" />
     <ClCompile Include="WishTransform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -149,24 +170,43 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="WishFontRenderer.cpp" />
-    <ClCompile Include="WishFramebuffer.cpp" />
+    <ClCompile Include="WishOGLFramebuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishGameObject.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="WishIO.cpp" />
-    <ClCompile Include="WishLua.cpp" />
-    <ClCompile Include="WishMemory.cpp" />
-    <ClCompile Include="WishRenderer.cpp" />
-    <ClCompile Include="WishScene.cpp" />
+    <ClCompile Include="WishLua.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishMemory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishScene.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WishEngine.cpp" />
-    <ClCompile Include="WishMesh.cpp" />
-    <ClCompile Include="WishShader.cpp" />
-    <ClCompile Include="WishTexture.cpp" />
+    <ClCompile Include="WishEngine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishOGLMesh.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishOGLShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishOGLTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishTiming.cpp" />
+    <ClCompile Include="WishUI.cpp" />
+    <ClCompile Include="WishUIComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

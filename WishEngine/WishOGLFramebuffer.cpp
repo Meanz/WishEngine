@@ -1,7 +1,3 @@
-#include "stdafx.h"
-#include "WishCore.h"
-#include "WishFramebuffer.hpp"
-
 //###################
 //## RENDER BUFFER ##
 //###################

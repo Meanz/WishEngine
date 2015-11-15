@@ -1,7 +1,5 @@
 #pragma once
 
-#include "WishTexture.hpp"
-
 namespace Wish
 {
 

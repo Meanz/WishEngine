@@ -49,11 +49,15 @@ namespace Wish
 		wish_shader_program* ShaderProgram;
 	};
 
-	struct wish_assetmanager_context
+	struct wish_asset_manager
 	{
 		u32 m_TexCounter;
 		wish_asset_node RootTexture;
 		wish_asset_node RootShaderProgram;
+
+		void Init();
+		void FileUpdate(const char* dir, const char* fileName);
+		void Update();
 	};
 
 	__Wish_Export b32 Wish_Asset_CreateTexture(const char* id, u32 width, u32 height, PixelFormat pixelFormat);
@@ -63,8 +67,4 @@ namespace Wish
 
 	__Wish_Export wish_shader_program* Wish_Asset_LoadShader(const char* id, const char* file);
 	__Wish_Export wish_shader_program* Wish_Asset_GetShader(const char* id);
-
-	void Wish_AssetManager_Init();
-	void Wish_AssetManager_FileUpdate(const char* dir, const char* fileName);
-	void Wish_AssetManager_Update();
 }

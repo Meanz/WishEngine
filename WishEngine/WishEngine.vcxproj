@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestApp\Wish_FPS_Camera.h" />
-    <ClInclude Include="WishAssetManager.hpp" />
+    <ClInclude Include="WishAssetManager.h" />
     <ClInclude Include="Murmur3.h" />
     <ClInclude Include="WishDebug.h" />
     <ClInclude Include="WishDeferredRenderer.h" />
@@ -101,7 +101,7 @@
     <ClInclude Include="WishFontRenderer.hpp" />
     <ClInclude Include="WishFramebuffer.h" />
     <ClInclude Include="WishGameObject.h" />
-    <ClInclude Include="WishIO.hpp" />
+    <ClInclude Include="WishIO.h" />
     <ClInclude Include="WishLua.h" />
     <ClInclude Include="WishMemory.h" />
     <ClInclude Include="WishModel.h" />
@@ -114,6 +114,7 @@
     <ClInclude Include="WishScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WishSprite.h" />
     <ClInclude Include="WishString.h" />
     <ClInclude Include="WishTransform.h" />
     <ClInclude Include="WishEngine.h" />
@@ -127,7 +128,10 @@
     <ClInclude Include="WishTiming.h" />
     <ClInclude Include="WishTypes.h" />
     <ClInclude Include="WishUI.h" />
+    <ClInclude Include="WishUIButton.h" />
     <ClInclude Include="WishUIComponent.h" />
+    <ClInclude Include="WishUIPanel.h" />
+    <ClInclude Include="WishUIWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WishAssetManager.cpp" />
@@ -156,13 +160,12 @@
     <ClCompile Include="WishOGLRenderer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="WishPlatform.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="WishPrimitives.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="WishString.cpp" />
+    <ClCompile Include="WishString.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishTransform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -176,7 +179,9 @@
     <ClCompile Include="WishGameObject.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="WishIO.cpp" />
+    <ClCompile Include="WishIO.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishLua.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -204,7 +209,16 @@
     </ClCompile>
     <ClCompile Include="WishTiming.cpp" />
     <ClCompile Include="WishUI.cpp" />
+    <ClCompile Include="WishUIButton.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishUIComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishUIPanel.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WishUIWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>

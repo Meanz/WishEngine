@@ -7,8 +7,11 @@
 #include "WishRenderer.h"	//Renderer does not need things from scene?
 #include "WishScene.h"		//Scene needs things from renderer
 
+//
+#include "WishUI.h"
+
 //Asset System
-#include "WishAssetManager.hpp"
+#include "WishAssetManager.h"
 
 namespace Wish
 {
@@ -29,9 +32,10 @@ namespace Wish
 		wish_lua_state* LuaState;
 
 		wish_engine_callback Callback;
-		wish_assetmanager_context AssetManager;
-		wish_scene_context Scene;
-		wish_renderer_context Renderer;
+		wish_asset_manager AssetManager;
+		wish_scene Scene;
+		wish_renderer Renderer;
+		wish_ui UI;
 
 		//Internal
 		bool isRunning;

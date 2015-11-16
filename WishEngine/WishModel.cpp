@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Wish.h"
 #include "WishModel.h"
-#include "WishIO.hpp"
 
 namespace Wish
 {

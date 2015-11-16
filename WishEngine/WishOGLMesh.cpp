@@ -1,6 +1,21 @@
 namespace Wish
 {
 
+	u32 GetVertexSize(wish_mesh_type type)
+	{
+		u32 result = 0;
+		if (type == wish_mesh_type::WISH_VERTEX_VT) {
+			result = sizeof(Vertex_VT);
+		}
+		else if (type == wish_mesh_type::WISH_VERTEX_VNT) {
+			result = sizeof(Vertex_VNT);
+		}
+		else if (type == wish_mesh_type::WISH_VERTEX_VNTBW) {
+			result = sizeof(Vertex_VNTBW);
+		}
+		return result;
+	}
+
 	wish_mesh::wish_mesh()
 	{
 		//Default to vnt
@@ -17,6 +32,12 @@ namespace Wish
 		Vertices = vertices;
 		NumVertices = numVertices;
 		VertexSize = vertexSize;
+	}
+
+	void wish_mesh::SetVertices(r32* vertices, u32 numVertices) {
+		Vertices = vertices;
+		NumVertices = numVertices;
+		VertexSize = GetVertexSize(MeshType);
 	}
 
 	void wish_mesh::SetIndices(u32* indices, u32 numIndices)
@@ -67,14 +88,27 @@ namespace Wish
 				GL_STATIC_DRAW);
 
 			//Assumption is VNT
-			if (MeshType == WISH_VERTEX_VNT)
+			if (MeshType == WISH_VERTEX_VT)
 			{
+				//Position
 				glEnableVertexAttribArray(0);
 				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)0);
 
+				//Texture
+				glEnableVertexAttribArray(1);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
+			}
+			if (MeshType == WISH_VERTEX_VNT)
+			{
+				//Position
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)0);
+
+				//Normal
 				glEnableVertexAttribArray(1);
 				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
 
+				//Texture
 				glEnableVertexAttribArray(2);
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VertexSize, (void*)(6 * sizeof(GLfloat)));
 			}

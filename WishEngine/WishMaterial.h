@@ -10,6 +10,9 @@ namespace Wish
 		//
 		wish_texture* NormalMap;
 
+		//
+		v4 Color;
+
 		//Lambert
 		v3 Diffuse;
 		v3 Specular;

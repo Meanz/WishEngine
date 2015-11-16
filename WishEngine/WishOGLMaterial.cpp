@@ -22,7 +22,8 @@ namespace Wish
 		Wish_Hash("T_Normal"),					//18
 		Wish_Hash("T_SSAO"),					//19
 		Wish_Hash("R_Width"),					//20
-		Wish_Hash("R_Height")					//21
+		Wish_Hash("R_Height"),					//21
+		Wish_Hash("M_Color")					//22
 	};
 
 	//Lighting
@@ -36,6 +37,7 @@ namespace Wish
 #define L_AttenuationExp 7
 
 	//M Values
+#define M_Color 22
 
 	//T Values
 #define T_Albedo 15
@@ -56,7 +58,7 @@ namespace Wish
 #define R_Height 21
 
 	void Wish_Renderer_ApplyMaterial(wish_shader_program* program, wish_material* material) {
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		if (material != NULL) {
 
 			//Static albedo ? :o
@@ -92,7 +94,7 @@ namespace Wish
 	}
 
 	void Wish_Renderer_ApplyUniforms(wish_shader_program* pShaderProgram, wish_material* pMaterial, wish_light* pLight) {
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		if (pShaderProgram == NULL) {
 			return;
 		}
@@ -231,6 +233,15 @@ namespace Wish
 			{
 				if (pLight == nullptr) continue;
 				glUniform1f(loc, ((wish_point_light*)pLight)->AttenuationExp);
+			}
+			else if (hash == hashTable[M_Color])
+			{
+				if (pMaterial == nullptr) {
+					glUniform4f(loc, 1.0, 1.0, 1.0, 1.0);
+				}
+				else {
+					glUniform4fv(loc, 1, value_ptr(pMaterial->Color));
+				}
 			}
 			else  {
 				printf("Unhandled uniform %s\n", name);

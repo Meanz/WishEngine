@@ -1,13 +1,38 @@
 #pragma once
 
+#include "WishSprite.h"
 #include "WishUIComponent.h"
+#include "WishUIPanel.h"
+#include "WishUIButton.h"
+#include "WishUIWindow.h"
 
 namespace Wish
 {
 
-	struct WishUIContext
+	class wish_ui
 	{
+	public:
 
+		wish_ui_component Root;
+		wish_shader_program* UIProgram;
+		//Hmm
+		wish_shader_program* UIProgramColor;
+		//
+		wish_texture* TestTexture;
+
+		wish_ui();
+		~wish_ui();
+
+
+		
+		void Init();
+		void DebugString(const char* str, i32 x, i32 y);
+		void Rect(i32 x, i32 y, i32 w, i32 h, u32 color);
+
+		//
+		wish_input* GetInput();
+
+		void Draw();
 	};
 
 };

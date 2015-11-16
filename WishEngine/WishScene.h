@@ -9,10 +9,13 @@
 namespace Wish
 {
 
-	struct wish_scene_context
+	struct wish_scene
 	{
 		wish_transform* Root;
 		wish_camera Camera;
+
+		void Init();
+		void Process();
 	};
 
 	__Wish_Export wish_game_object* Wish_Scene_NewGameObject(const char* name);
@@ -23,7 +26,4 @@ namespace Wish
 
 	__Wish_Export wish_transform* Wish_Scene_GetRoot();
 	__Wish_Export wish_camera* Wish_Scene_GetCamera();
-	
-	__Wish_Export void Wish_Scene_Init();
-	__Wish_Export void Wish_Scene_Process();
 }

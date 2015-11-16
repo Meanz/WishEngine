@@ -42,7 +42,7 @@ namespace Wish
 
 #define KERNEL_SIZE 128
 
-	struct wish_renderer_context
+	struct wish_renderer
 	{
 
 		//2.0!
@@ -104,10 +104,11 @@ namespace Wish
 		bool ShowSSAO, ShowTextures;
 		GLuint Width, Height;
 
+		void Init(i32 width, i32 height);
+		void Flush();
+
 	};
 
-	
-	void Wish_Renderer_Init(int width, int height);
 
 	void Wish_Renderer_SetWorldMatrix(const mat4& world);
 	const mat4& Wish_Renderer_GetWorldMatrix();
@@ -125,8 +126,6 @@ namespace Wish
 	void Wish_Renderer_Submit(wish_light* light);
 
 	void Wish_Renderer_BindTexture(GLuint textureSlot, wish_texture* pTexture);
-
-	void Wish_Renderer_Flush();
 
 	void Wish_Renderer_DrawMesh(wish_mesh* mesh, wish_material* material);
 

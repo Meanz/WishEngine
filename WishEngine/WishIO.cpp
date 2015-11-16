@@ -1,7 +1,3 @@
-#include "stdafx.h"
-#include "Wish.h"
-#include "WishIO.hpp"
-
 namespace Wish
 {
 	const char* WishIOException::what() const throw()

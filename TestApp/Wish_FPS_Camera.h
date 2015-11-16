@@ -1,7 +1,7 @@
 #pragma once
 
 //To get the naming's correctly
-#include <WishCore.h>
+#include <Wish.h>
 
 namespace Wish
 {

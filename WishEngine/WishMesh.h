@@ -55,7 +55,9 @@ namespace Wish
 		__Wish_Export wish_mesh();
 		__Wish_Export ~wish_mesh();
 
+		//DEPRECATED
 		__Wish_Export void SetVertices(r32* vertices, u32 numVertices, u32 vertexSize);
+		__Wish_Export void SetVertices(r32* vertices, u32 numVertices);
 		__Wish_Export void SetIndices(u32* indices, u32 numIndices);
 		void DeleteBuffers();
 		__Wish_Export b32 Compile();

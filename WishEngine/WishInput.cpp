@@ -1,8 +1,21 @@
 namespace Wish
 {
 
+	wish_input::wish_input()
+	{
+
+	}
+
+	wish_input::~wish_input()
+	{
+
+	}
+
+	
+
+
 	//Input
-	b32 Wish_Input_IsKeyDown(u32 key)
+	b32 wish_input::IsKeyDown(u32 key)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
@@ -10,7 +23,7 @@ namespace Wish
 			return 0;
 		return  context->State->Input.KeysDown[key];
 	}
-	b32 Wish_Input_IsKeyPressed(u32 key)
+	b32 wish_input::IsKeyPressed(u32 key)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
@@ -18,7 +31,7 @@ namespace Wish
 			return 0;
 		return  context->State->Input.KeysPressed[key];
 	}
-	b32 Wish_Input_IsKeyReleased(u32 key)
+	b32 wish_input::IsKeyReleased(u32 key)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
@@ -27,29 +40,7 @@ namespace Wish
 		return  context->State->Input.KeysReleased[key];
 	}
 
-	i32 Wish_Input_GetMouseX()
-	{
-		wish_engine_context* context = Wish_Engine_GetContext();
-		return context->State->Input.MouseX;
-	}
-	i32 Wish_Input_GetMouseY()
-	{
-		wish_engine_context* context = Wish_Engine_GetContext();
-		return context->State->Input.MouseY;
-	}
-
-	i32 Wish_Input_GetMouseDX()
-	{
-		wish_engine_context* context = Wish_Engine_GetContext();
-		return context->State->Input.MouseDX;
-	}
-	i32 Wish_Input_GetMouseDY()
-	{
-		wish_engine_context* context = Wish_Engine_GetContext();
-		return context->State->Input.MouseDY;
-	}
-
-	b32 Wish_Input_IsMouseDown(u32 mb)
+	b32 wish_input::IsMouseDown(u32 mb)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
@@ -57,7 +48,7 @@ namespace Wish
 			return 0;
 		return  context->State->Input.MouseButtonsDown[mb];
 	}
-	b32 Wish_Input_IsMousePressed(u32 mb)
+	b32 wish_input::IsMousePressed(u32 mb)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
@@ -66,12 +57,34 @@ namespace Wish
 		return  context->State->Input.MouseButtonsPressed[mb];
 	}
 
-	b32 Wish_Input_IsMouseReleased(u32 mb)
+	b32 wish_input::IsMouseReleased(u32 mb)
 	{
 		wish_engine_context* context = Wish_Engine_GetContext();
 		//Key bounds check
 		if (mb >= WISH_INPUT_MAX_BUTTONS)
 			return 0;
 		return  context->State->Input.MouseButtonsReleased[mb];
+	}
+
+	i32 wish_input::GetMouseX()
+	{
+		wish_engine_context* context = Wish_Engine_GetContext();
+		return context->State->Input.MouseX;
+	}
+	i32 wish_input::GetMouseY()
+	{
+		wish_engine_context* context = Wish_Engine_GetContext();
+		return context->State->Input.MouseY;
+	}
+
+	i32 wish_input::GetMouseDX()
+	{
+		wish_engine_context* context = Wish_Engine_GetContext();
+		return context->State->Input.MouseDX;
+	}
+	i32 wish_input::GetMouseDY()
+	{
+		wish_engine_context* context = Wish_Engine_GetContext();
+		return context->State->Input.MouseDY;
 	}
 }

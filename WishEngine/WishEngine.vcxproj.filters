@@ -99,9 +99,6 @@
     <ClInclude Include="WishFrameInfo.hpp">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="WishIO.hpp">
-      <Filter>Header Files\Engine\IO</Filter>
-    </ClInclude>
     <ClInclude Include="WishFontRenderer.hpp">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
@@ -201,9 +198,6 @@
     <ClInclude Include="WishUI.h">
       <Filter>Header Files\Engine\Render\UI</Filter>
     </ClInclude>
-    <ClInclude Include="WishAssetManager.hpp">
-      <Filter>Header Files\Engine\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="WishMemory.h">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
@@ -215,6 +209,24 @@
     </ClInclude>
     <ClInclude Include="Murmur3.h">
       <Filter>Header Files\Engine\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="WishAssetManager.h">
+      <Filter>Header Files\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="WishSprite.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishIO.h">
+      <Filter>Header Files\Engine\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="WishUIWindow.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishUIButton.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishUIPanel.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,11 +326,17 @@
     <ClCompile Include="WishMemory.cpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="WishPlatform.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="WishOGLFramebuffer.cpp">
       <Filter>Source Files\Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUIWindow.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUIButton.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUIPanel.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

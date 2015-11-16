@@ -2,7 +2,7 @@
 
 //Mandatory include?
 #include "Wish.h"
-#include "WishAssetManager.hpp"
+#include "WishAssetManager.h"
 
 class UpdateListener : public FW::FileWatchListener
 {
@@ -22,7 +22,7 @@ public:
 			break;
 		case FW::Actions::Modified:
 			//std::cout << "File (" << dir + "\\" + filename << ") Modified! " << std::endl;
-			Wish_AssetManager_FileUpdate(dir.c_str(), filename.c_str());
+			//Wish_Get_AssetManager().FileUpdate(dir.c_str(), filename.c_str());
 			break;
 		default:
 			printf("Should never happen!\n");
@@ -97,7 +97,7 @@ wish_asset_node* Wish_Asset_Find(wish_asset_node* root, wish_murmur3_hash hash)
 
 b32 Wish::Wish_Asset_CreateTexture(const char* id, u32 width, u32 height, PixelFormat pixelFormat)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	if (!Wish_Asset_GetTexture(id)) {
 		//Alloc a new node
 		wish_asset_texture* asset = (wish_asset_texture*)Wish_Memory_Alloc(MemoryType::LONG_LIFE, sizeof(wish_asset_texture));
@@ -112,14 +112,14 @@ b32 Wish::Wish_Asset_CreateTexture(const char* id, u32 width, u32 height, PixelF
 
 wish_texture* Wish::Wish_Asset_LoadTexture(const char* file)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	//Gen random name
 	return Wish_Asset_LoadTexture("tex_", file);
 }
 
 wish_texture* Wish::Wish_Asset_LoadTexture(const char* id, const char* file)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	//Do we have any assets with this name already?
 	//Hash our id
 	//Murmur3Hash hash = Wish_Hash(id.c_str());
@@ -168,7 +168,7 @@ wish_texture* Wish::Wish_Asset_LoadTexture(const char* id, const char* file)
 
 wish_texture* Wish::Wish_Asset_GetTexture(const char* id)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_texture* asset = (wish_asset_texture*)Wish_Asset_Find(&assetManager.RootTexture, hash);
 	return asset == NULL ? NULL : &asset->Texture;
@@ -176,7 +176,7 @@ wish_texture* Wish::Wish_Asset_GetTexture(const char* id)
 
 wish_shader_program* Wish::Wish_Asset_LoadShader(const char* id, const char* file)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_shaderprogram* asset = (wish_asset_shaderprogram*)Wish_Asset_Find(&assetManager.RootShaderProgram, hash);
 	if (asset == NULL)
@@ -210,97 +210,97 @@ wish_shader_program* Wish::Wish_Asset_LoadShader(const char* id, const char* fil
 
 wish_shader_program* Wish::Wish_Asset_GetShader(const char* id)
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+	wish_asset_manager& assetManager = Wish_Engine_GetContext()->AssetManager;
 	wish_murmur3_hash hash = Wish_Hash(id);
 	wish_asset_shaderprogram* asset = (wish_asset_shaderprogram*)Wish_Asset_Find(&assetManager.RootShaderProgram, hash);
 	return asset == NULL ? NULL : asset->ShaderProgram;
 }
 
-void Wish::Wish_AssetManager_Init()
+namespace Wish
 {
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	// Create the object
-	//assetManager.m_pFileWatcher = new FW::FileWatcher();
 
-	//Introducing MemLeak 2k15
-	//UpdateListener* ul = new UpdateListener();
+	void wish_asset_manager::Init() {
+		// Create the object
+		//assetManager.m_pFileWatcher = new FW::FileWatcher();
 
-	// add a directory watch
-	//FW::WatchID watchid = assetManager.m_pFileWatcher->addWatch("./data/shaders/", ul);
-	//FW::WatchID watchid2 = assetManager.m_pFileWatcher->addWatch("./data/textures/", ul);
+		//Introducing MemLeak 2k15
+		//UpdateListener* ul = new UpdateListener();
 
-	//Wrap the root nodes around themselves
-	ZeroMemory(&assetManager.RootTexture, sizeof(wish_asset_node));
-	assetManager.RootTexture.Next = &assetManager.RootTexture;
-	assetManager.RootTexture.Prev = &assetManager.RootTexture;
-	ZeroMemory(&assetManager.RootShaderProgram, sizeof(wish_asset_node));
-	assetManager.RootShaderProgram.Next = &assetManager.RootShaderProgram;
-	assetManager.RootShaderProgram.Prev = &assetManager.RootShaderProgram;
-}
+		// add a directory watch
+		//FW::WatchID watchid = assetManager.m_pFileWatcher->addWatch("./data/shaders/", ul);
+		//FW::WatchID watchid2 = assetManager.m_pFileWatcher->addWatch("./data/textures/", ul);
 
+		//Wrap the root nodes around themselves
+		ZeroMemory(&RootTexture, sizeof(wish_asset_node));
+		RootTexture.Next = &RootTexture;
+		RootTexture.Prev = &RootTexture;
+		ZeroMemory(&RootShaderProgram, sizeof(wish_asset_node));
+		RootShaderProgram.Next = &RootShaderProgram;
+		RootShaderProgram.Prev = &RootShaderProgram;
+	}
 
-void Wish::Wish_AssetManager_FileUpdate(const char* dir, const char* file) {
-	/*wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	//Find file
-	auto iter = assetManager.m_mTrackedTextures.find(file);
-	if (iter != assetManager.m_mTrackedTextures.end())
-	{
+	void wish_asset_manager::Update() {
+		// somewhere in your update loop call update
+		/*if (assetManager.m_pFileWatcher != 0) {
+		assetManager.m_pFileWatcher->update();
+		}*/
+	}
+
+	void wish_asset_manager::FileUpdate(const char* dir, const char* filename) {
+		/*wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
+		//Find file
+		auto iter = assetManager.m_mTrackedTextures.find(file);
+		if (iter != assetManager.m_mTrackedTextures.end())
+		{
 		//Supposedly reload this texture! but for now ignore :D
 		//printf("Found file update for %s\n", file.c_str());
 
 		auto iterTexture = assetManager.m_mTextures.find(iter->second);
 
 		if (iterTexture != assetManager.m_mTextures.end()) {
-			printf("FileUpdate: %s\n", (dir + file).c_str());
-			Wish_Texture_DEBUGLoadTexture(iterTexture->second, dir + file);
+		printf("FileUpdate: %s\n", (dir + file).c_str());
+		Wish_Texture_DEBUGLoadTexture(iterTexture->second, dir + file);
 		}
 		else {
-			throw new runtime_error("Unexpected event.");
+		throw new runtime_error("Unexpected event.");
 		}
-	}
-	else {
+		}
+		else {
 
 		//Try to find a shader update
 		auto iter = assetManager.m_mTrackedShaders.find(file);
 		if (iter != assetManager.m_mTrackedShaders.end()) {
 
-			auto iterShader = assetManager.m_mShaders.find(iter->second);
-			if (iterShader != assetManager.m_mShaders.end()) {
-				printf("ShaderUpdate: %s\n", (dir + file).c_str());
+		auto iterShader = assetManager.m_mShaders.find(iter->second);
+		if (iterShader != assetManager.m_mShaders.end()) {
+		printf("ShaderUpdate: %s\n", (dir + file).c_str());
 
-				//Raw load this shader
-				wish_shader_program* program = new wish_shader_program();
+		//Raw load this shader
+		wish_shader_program* program = new wish_shader_program();
 
-				Wish_ShaderProgram_Parse(program, dir + file);
+		Wish_ShaderProgram_Parse(program, dir + file);
 
-				if (program->glHandle > 0)
-				{
-					//W0h00
+		if (program->glHandle > 0)
+		{
+		//W0h00
 
-					//Delete current program
-					Wish_ShaderProgram_Delete(iterShader->second);
+		//Delete current program
+		Wish_ShaderProgram_Delete(iterShader->second);
 
-					//Copy over relevant data
-					iterShader->second->glHandle = program->glHandle;
-					iterShader->second->m_UniformData = program->m_UniformData;
+		//Copy over relevant data
+		iterShader->second->glHandle = program->glHandle;
+		iterShader->second->m_UniformData = program->m_UniformData;
 
-					//We don't want to delete the new program, which will be done after
-					//delete program;
-					program->glHandle = -1;
-				}
-
-				//Delete the program
-				delete program;
-			}
+		//We don't want to delete the new program, which will be done after
+		//delete program;
+		program->glHandle = -1;
 		}
-	}*/
+
+		//Delete the program
+		delete program;
+		}
+		}
+		}*/
+	}
 }
 
-void Wish::Wish_AssetManager_Update()
-{
-	wish_assetmanager_context& assetManager = Wish_Engine_GetContext()->AssetManager;
-	// somewhere in your update loop call update
-	/*if (assetManager.m_pFileWatcher != 0) {
-		assetManager.m_pFileWatcher->update();
-	}*/
-}

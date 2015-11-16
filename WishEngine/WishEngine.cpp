@@ -56,8 +56,9 @@ void EngineInitialize(wish_game_state* state, wish_game_memory* memory)
 {
 	Wish_Memory_Init(memory);
 
-	context = (wish_engine_context*)Wish_Memory_Alloc(memory, sizeof(wish_engine_context));
-	Wish_Memory_Zero(context, sizeof(wish_engine_context));
+	void* mem = Wish_Memory_Alloc(memory, sizeof(wish_engine_context));
+	Wish_Memory_Zero(mem, sizeof(wish_engine_context));
+	context = new (mem)wish_engine_context();
 	context->State = state;
 	context->Memory = memory;
 
@@ -65,16 +66,19 @@ void EngineInitialize(wish_game_state* state, wish_game_memory* memory)
 	state->IsEngineInitialized = true;
 
 	//Initialize our asset manager
-	Wish_AssetManager_Init();
+	context->AssetManager.Init();
 
 	//Initialize our renderer
-	Wish_Renderer_Init(context->State->Window.Width, context->State->Window.Height);
+	context->Renderer.Init(context->State->Window.Width, context->State->Window.Height);
 
 	//Initialize our scene
-	Wish_Scene_Init();
+	context->Scene.Init();
 
 	//Initiaize our Lua state
 	context->LuaState = Wish_Lua_NewState();
+
+	//Initialize our GUI
+	context->UI.Init();
 }
 
 __Wish_Export _Def_Wish_Engine_OnInit(_Wish_Engine_OnInit)
@@ -98,34 +102,32 @@ __Wish_Export _Def_Wish_Engine_OnReload(_Wish_Engine_OnReload)
 
 __Wish_Export _Def_Wish_Engine_OnFixedUpdate(_Wish_Engine_OnFixedUpdate)
 {
-	CONTEXT_CHECK
+	CONTEXT_CHECK;
 }
 
 __Wish_Export _Def_Wish_Engine_OnUpdate(_Wish_Engine_OnUpdate)
 {
-	CONTEXT_CHECK
-
-		if (Wish_Input_IsKeyReleased(wish_scancode::WISH_SCANCODE_5))
-		{
-			printf("Scancode 5\n");
-			Wish_Lua_DoFile(context->LuaState, "./data/lua/test.lua");
-		}
+	CONTEXT_CHECK;
+	if (Wish_Get_Input()->IsKeyReleased(wish_scancode::WISH_SCANCODE_5))
+	{
+		printf("Scancode 5\n");
+		Wish_Lua_DoFile(context->LuaState, "./data/lua/test.lua");
+	}
 }
 
 __Wish_Export _Def_Wish_Engine_OnFrame(_Wish_Engine_OnFrame)
 {
-	CONTEXT_CHECK
-		if (context->Callback.OnFrame) {
-			context->Callback.OnFrame();
-		}
+	CONTEXT_CHECK;
+	if (context->Callback.OnFrame) {
+		context->Callback.OnFrame();
+	}
 
 	//Resource processing
-	Wish_AssetManager_Update();
+	context->AssetManager.Update();
 
 	//Process everything
-	Wish_Scene_Process();
+	context->Scene.Process();
 
-	//Swap buffers :D
-	//Flush the frame!
-	Wish_Renderer_Flush();
+	//Flush the frame
+	context->Renderer.Flush();
 }

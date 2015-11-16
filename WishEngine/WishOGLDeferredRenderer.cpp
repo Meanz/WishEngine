@@ -29,7 +29,7 @@ namespace Wish
 
 	void Wish_DeferredRenderer_GeometryPass()
 	{
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		//Active things
 		glEnable(GL_CULL_FACE);
 		glDepthMask(GL_TRUE);
@@ -78,7 +78,7 @@ namespace Wish
 	}
 
 	void StencilPass(wish_point_light* light) {
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		glEnable(GL_STENCIL_TEST);
 		glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -104,7 +104,7 @@ namespace Wish
 
 	void PointLightPass(wish_point_light* pLight) {
 		//Point light test
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		{
 			glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
 
@@ -133,7 +133,7 @@ namespace Wish
 
 	void Wish_DeferredRenderer_LightingPass()
 	{
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		//## BeginLightPasses();
 
 		//Unbind all textures
@@ -202,7 +202,7 @@ namespace Wish
 
 	void Wish_DeferredRenderer_DrawDebugTextures()
 	{
-		wish_renderer_context& renderer = Wish_Engine_GetContext()->Renderer;
+		wish_renderer& renderer = Wish_Engine_GetContext()->Renderer;
 		Wish_Renderer_SetShaderProgram(renderer.SimpleUnlitShader);
 		{
 			//We need to set the world matrix

@@ -11,26 +11,6 @@ struct wish_platform
 	Wish_Void_Func FreeMouse;
 };
 
-#define WISH_INPUT_MAX_KEYS 512
-#define WISH_INPUT_MAX_BUTTONS 20
-
-struct wish_input
-{
-	b32 KeysDown[WISH_INPUT_MAX_KEYS];
-
-	b32 KeysPressed[WISH_INPUT_MAX_KEYS];
-	b32 KeysReleased[WISH_INPUT_MAX_KEYS];
-
-	b32 MouseButtonsDown[WISH_INPUT_MAX_BUTTONS];
-	b32 MouseButtonsPressed[WISH_INPUT_MAX_BUTTONS];
-	b32 MouseButtonsReleased[WISH_INPUT_MAX_BUTTONS];
-
-	i32 MouseX;
-	i32 MouseY;
-	i32 MouseDX;
-	i32 MouseDY;
-};
-
 struct wish_window
 {
 	i32 Width;

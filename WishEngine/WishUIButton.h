@@ -3,7 +3,7 @@
 namespace Wish
 {
 
-	class wish_ui_button : public wish_ui_component
+	class wish_ui_button : public wish_ui_panel
 	{
 
 
@@ -13,6 +13,8 @@ namespace Wish
 
 		wish_ui_button();
 		~wish_ui_button();
+
+		virtual void OnDraw(wish_ui* ui);
 	};
 
 }

@@ -14,9 +14,9 @@ namespace Wish {
 		wish_engine_context* context = Wish_Engine_GetContext();
 		return context->Memory;
 	}
-	wish_lua_state* Wish_Get_Lua() {
+	wish_lua_script* Wish_Get_Lua() {
 		wish_engine_context* context = Wish_Engine_GetContext();
-		return context->LuaState;
+		return context->LuaScript;
 	}
 	wish_scene* Wish_Get_Scene() {
 		wish_engine_context* context = Wish_Engine_GetContext();

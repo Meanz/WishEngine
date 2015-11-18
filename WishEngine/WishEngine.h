@@ -29,7 +29,7 @@ namespace Wish
 		wish_game_state* State;
 		wish_game_memory* Memory;
 
-		wish_lua_state* LuaState;
+		wish_lua_script* LuaScript;
 
 		wish_engine_callback Callback;
 		wish_asset_manager AssetManager;

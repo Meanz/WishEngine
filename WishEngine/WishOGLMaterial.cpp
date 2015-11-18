@@ -23,7 +23,7 @@ namespace Wish
 		Wish_Hash("T_SSAO"),					//19
 		Wish_Hash("R_Width"),					//20
 		Wish_Hash("R_Height"),					//21
-		Wish_Hash("M_Color")					//22
+		Wish_Hash("M_Color"),					//22
 	};
 
 	//Lighting
@@ -87,6 +87,15 @@ namespace Wish
 				if (hash == hashTable[R_World])
 				{
 					glUniformMatrix4fv(loc, 1, GL_FALSE, value_ptr(renderer.WorldMatrix));
+				}
+				else if (hash == hashTable[M_Color])
+				{
+					if (material == nullptr) {
+						glUniform4f(loc, 1.0, 1.0, 1.0, 1.0);
+					}
+					else {
+						glUniform4fv(loc, 1, value_ptr(material->Color));
+					}
 				}
 			}
 		}
@@ -245,6 +254,7 @@ namespace Wish
 			}
 			else  {
 				printf("Unhandled uniform %s\n", name);
+				ASSERT(false);
 			}
 
 		}

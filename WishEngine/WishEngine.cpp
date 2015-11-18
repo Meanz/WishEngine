@@ -74,9 +74,6 @@ void EngineInitialize(wish_game_state* state, wish_game_memory* memory)
 	//Initialize our scene
 	context->Scene.Init();
 
-	//Initiaize our Lua state
-	context->LuaState = Wish_Lua_NewState();
-
 	//Initialize our GUI
 	context->UI.Init();
 }
@@ -111,7 +108,7 @@ __Wish_Export _Def_Wish_Engine_OnUpdate(_Wish_Engine_OnUpdate)
 	if (Wish_Get_Input()->IsKeyReleased(wish_scancode::WISH_SCANCODE_5))
 	{
 		printf("Scancode 5\n");
-		Wish_Lua_DoFile(context->LuaState, "./data/lua/test.lua");
+		context->LuaScript->DoFile("./data/lua/test.lua");
 	}
 }
 

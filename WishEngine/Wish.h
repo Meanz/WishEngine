@@ -64,7 +64,7 @@ typedef mat4 m4;
 //
 namespace Wish {
 	__Wish_Export wish_game_memory* Wish_Get_GameMemory();
-	__Wish_Export wish_lua_state* Wish_Get_Lua();
+	__Wish_Export wish_lua_script* Wish_Get_Lua();
 	__Wish_Export wish_scene* Wish_Get_Scene();
 	__Wish_Export wish_renderer* Wish_Get_Renderer();
 	__Wish_Export wish_ui* Wish_Get_UI();

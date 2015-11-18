@@ -14,12 +14,20 @@ namespace Wish
 	public:
 
 		wish_ui_component Root;
+		//
 		wish_shader_program* UIProgram;
 		//Hmm
 		wish_shader_program* UIProgramColor;
 		//
 		wish_texture* TestTexture;
+		//
+		wish_texture* WhiteTexture;
 
+		// Input System
+		wish_ui_component* HoverComponent;
+		wish_ui_component* FocusComponent;
+
+		//
 		wish_ui();
 		~wish_ui();
 

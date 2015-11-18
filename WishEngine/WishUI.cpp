@@ -16,7 +16,8 @@ namespace Wish
 	FreetypeFont m_DebugFont;
 
 	wish_ui::wish_ui() {
-
+		HoverComponent = NULL;
+		FocusComponent = NULL;
 	}
 
 	wish_ui::~wish_ui() {
@@ -31,6 +32,7 @@ namespace Wish
 		UIProgram = Wish_Asset_LoadShader("_ui", "./data/shaders/ui.glsl");
 		UIProgramColor = Wish_Asset_LoadShader("_ui_color", "./data/shaders/ui_color.glsl");
 		TestTexture = Wish_Asset_LoadTexture("_ui_test_texture", "./data/textures/test2.png");
+		WhiteTexture = Wish_Asset_LoadTexture("_ui_white_texture", "./data/textures/white.png");
 	}
 
 	void wish_ui::DebugString(const char* str, i32 x, i32 y) 
@@ -68,6 +70,7 @@ namespace Wish
 
 	void wish_ui::Draw()
 	{
+		HoverComponent = NULL;
 
 		Wish_Renderer_SetShaderProgram(UIProgram);
 

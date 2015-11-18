@@ -3,11 +3,29 @@
 namespace Wish
 {
 
-	wish_ui_window::wish_ui_window()
+	wish_ui_window::wish_ui_window(i32 width, i32 height)
 	{
-
+		//Add(&Background);
+		Add(&TitleBar);
 		//Add stuff to me
 		Add(&CloseButton);
+
+		CloseButton.Position.x = width - 32;
+		CloseButton.Dimensions.x = 32;
+		CloseButton.Dimensions.y = 32;
+		CloseButton.IsTransformDirty = true;
+		CloseButton.Material.Color = v4(0.0, 0.0, 1.0, 1.0);
+	
+
+		TitleBar.Material.Color = v4(0.0, 1.0, 0.0, 1.0);
+
+		Position.x = 100;
+		Position.y = 100;
+
+		SetSize(width, height);
+		Background.IsTransformDirty = true;
+		TitleBar.IsTransformDirty = true;
+		IsTransformDirty = true;
 	}
 
 	wish_ui_window::~wish_ui_window()
@@ -15,18 +33,22 @@ namespace Wish
 
 	}
 
+	void wish_ui_window::SetSize(i32 width, i32 height)
+	{
+		Dimensions.x = (r32)width;
+		Dimensions.y = (r32)height;
+		Background.Dimensions.x = (r32)width;
+		Background.Dimensions.y = (r32)height;
+
+
+		TitleBar.Dimensions.x = (r32)width;
+		TitleBar.Dimensions.y = 32.0;
+	}
+
 	//Draw the window hmm
 	void wish_ui_window::OnDraw(wish_ui* ui)
 	{
-		//Do input checking here, or in fixed update?
-
-
-
-		//Draw top title bar
-
 		//Draw window background
-
-		//Draw my children too
-		wish_ui_component::Draw(ui);
+		wish_ui_panel::OnDraw(ui);
 	}
 }

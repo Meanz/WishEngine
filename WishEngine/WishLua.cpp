@@ -16,6 +16,23 @@ namespace Wish
 	// -1  -2  -3  -4  -5
 	//LIFO - Last In First Out 
 
+	template<class T>
+	T Wish_Lua_OperatorNew(...)
+	{
+		va_list args;
+		va_start(args, args);
+		void* mem = Wish_Memory_Alloc(sizeof(T));
+		T t = new (mem)(args);
+		va_end(args);
+		return t;
+	}
+
+	template<class T>
+	void Wish_Lua_OperatorDelete(T* t)
+	{
+		Wish_Memory_Free(t);
+	}
+
 	lua_func l_sin(wish_lua_state* L)
 	{
 		double d = luaL_checknumber(L, 1); /* Get argument */
@@ -39,6 +56,38 @@ namespace Wish
 
 		return 1; /* Number of arguments */
 	}
+
+	// UI
+
+	lua_func Wish_Lua_UI_New_Window(wish_lua_state* L)
+	{
+
+		//
+		int argc = lua_gettop(L);
+
+		//title
+		const char* name = luaL_checkstring(L, 1);
+
+		//x
+		i32 x = luaL_checkinteger(L, 1);
+
+		//y
+		i32 y = luaL_checkinteger(L, 1);
+
+		//w
+		i32 w = luaL_checkinteger(L, 1);
+	
+		//h
+		i32 h = luaL_checkinteger(L, 1);
+
+		//
+
+
+		//number of return values
+		return 1;
+	}
+
+	// END UI
 
 
 	static const struct luaL_reg SceneLib[] = {
@@ -77,11 +126,11 @@ namespace Wish
 	}
 
 	//
-
-	wish_lua_state* Wish_Lua_NewState()
+	
+	wish_lua_script::wish_lua_script()
 	{
 		//init state
-		lua_State* L = luaL_newstate();
+		L = luaL_newstate();
 
 		luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
 
@@ -95,11 +144,14 @@ namespace Wish
 
 		lua_pushcfunction(L, l_sin);
 		lua_setglobal(L, "mysin");
-
-		return L;
 	}
 
-	void Wish_Lua_DoFile(wish_lua_state* L, const char* fn)
+	wish_lua_script::~wish_lua_script()
+	{
+		lua_close(L);
+	}
+
+	void wish_lua_script::DoFile(const char* fn)
 	{
 		//Grab state
 		if (luaL_dofile(L, fn))

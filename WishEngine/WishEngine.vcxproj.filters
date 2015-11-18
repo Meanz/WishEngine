@@ -338,5 +338,8 @@
     <ClCompile Include="WishUIPanel.cpp">
       <Filter>Source Files\Engine\Render\UI</Filter>
     </ClCompile>
+    <ClCompile Include="WishLuaWrapper.cpp">
+      <Filter>Source Files\Engine\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

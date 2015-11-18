@@ -17,6 +17,8 @@
 namespace Wish
 {
 
+	wish_ui_window* dbgWnd;
+
 	void wish_renderer::Init(int width, int height)
 	{
 		ActiveCamera = NULL;
@@ -56,7 +58,12 @@ namespace Wish
 
 		Sphere = WishOBJLoader_Load("./data/models/sphere.obj");
 
+		dbgWnd = new wish_ui_window(200, 300);
 
+		//
+		Wish_Get_UI()->Root.Add(dbgWnd);
+
+		//
 		m_bInit = true;
 	}
 

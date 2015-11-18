@@ -138,6 +138,9 @@
     <ClCompile Include="Murmur3.cpp" />
     <ClCompile Include="WishCore.cpp" />
     <ClCompile Include="WishDebug.cpp" />
+    <ClCompile Include="WishLuaWrapper.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="WishOGLDeferredRenderer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>

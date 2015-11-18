@@ -6,7 +6,14 @@ namespace Wish
 {
 	typedef lua_State wish_lua_state;
 
-	wish_lua_state* Wish_Lua_NewState();
+	class wish_lua_script
+	{
+	public:
+		wish_lua_state* L;
 
-	void Wish_Lua_DoFile(wish_lua_state* L, const char* fn);
+		wish_lua_script();
+		~wish_lua_script();
+
+		void DoFile(const char* fn);
+	};
 }

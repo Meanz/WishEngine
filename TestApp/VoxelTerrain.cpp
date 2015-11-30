@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VoxelTerrain.hpp"
 
-VoxelTerrain::VoxelTerrain() : WishGameObject("VoxelTerrain") {
+VoxelTerrain::VoxelTerrain() : wish_game_object("VoxelTerrain") {
 }
 
 VoxelTerrain::~VoxelTerrain()

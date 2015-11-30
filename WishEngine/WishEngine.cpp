@@ -11,7 +11,7 @@ namespace Wish
 	i32 Wish_Engine_GetFPS()
 	{
 		CONTEXT_CHECK;
-		return 0;
+		return context->State->FPS;
 	}
 
 	void Wish_Engine_SetApp(wish_engine_callback app)
@@ -102,19 +102,16 @@ __Wish_Export _Def_Wish_Engine_OnFixedUpdate(_Wish_Engine_OnFixedUpdate)
 	CONTEXT_CHECK;
 }
 
-__Wish_Export _Def_Wish_Engine_OnUpdate(_Wish_Engine_OnUpdate)
+__Wish_Export _Def_Wish_Engine_OnFrame(_Wish_Engine_OnFrame)
 {
 	CONTEXT_CHECK;
+
 	if (Wish_Get_Input()->IsKeyReleased(wish_scancode::WISH_SCANCODE_5))
 	{
 		printf("Scancode 5\n");
 		context->LuaScript->DoFile("./data/lua/test.lua");
 	}
-}
 
-__Wish_Export _Def_Wish_Engine_OnFrame(_Wish_Engine_OnFrame)
-{
-	CONTEXT_CHECK;
 	if (context->Callback.OnFrame) {
 		context->Callback.OnFrame();
 	}

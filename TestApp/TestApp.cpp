@@ -2,21 +2,21 @@
 //
 
 #include "stdafx.h"
-#include <WishOBJLoader.hpp>
+#include <Wish.h>
+#include <WishOBJLoader.h>
 #include "Wish_FPS_Camera.h"
-#include <WishPrimitives.h>
 
 using namespace Wish;
 
 
-WishGeometry* m_JeepGo;
+wish_geometry* m_JeepGo;
 wish_mesh* m_SphereMesh;
 wish_fps_camera fpsCamera;
 
 void AddLight(vec3 lightPos) {
 	if (m_SphereMesh == 0)
 		m_SphereMesh = WishOBJLoader_Load("./data/models/sphere.obj");
-	WishGeometry* m_Go = Wish_Scene_NewGeometry("PointLightThing");
+	wish_geometry* m_Go = Wish_Scene_NewGeometry("PointLightThing");
 
 	m_Go->Position = lightPos;
 	m_Go->Scale = vec3(0.3f, 0.3f, 0.3f);
@@ -38,21 +38,21 @@ void AddLight(vec3 lightPos) {
 void OnInit()
 {
 	//Create the jeep
-	
-	WishGeometry* geom = Wish_Scene_NewGeometry("jeep_model");
-	WishGameObject* jeep = Wish_Scene_NewGameObject("jeep_object");
+
+	wish_geometry* geom = Wish_Scene_NewGeometry("jeep_model");
+	wish_game_object* jeep = Wish_Scene_NewGameObject("jeep_object");
 	jeep->Attach(geom);
 	geom->Meshes[0] = (WishOBJLoader_Load("./data/models/jeep.obj"));
 	geom->Material.Albedo = Wish_Asset_LoadTexture("./data/models/jeep_army.png");
 	geom->Scale = vec3(0.01f, 0.01f, 0.01f);
 	geom->CalculateGlobal(mat4(1.0f));
 	Wish_Scene_GetRoot()->Attach(jeep);
-	
+
 	//Create plane
-	WishGeometry* plane = Wish_Scene_NewGeometry("plane");
+	wish_geometry* plane = Wish_Scene_NewGeometry("plane");
 	plane->Material.Albedo = Wish_Asset_LoadTexture("./data/textures/wald.png");
 	plane->AddMesh(Wish_Primitive_Plane(256, 256, 10, 10));
-	
+
 	//plane->Position = v3(0.0, 0.0, 0.0);
 	//plane->Scale = v3(1.0, 1.0, 1.0);
 	//plane->Rotation = quat(1.0, 0.0, 0.0, 0.0);
@@ -95,25 +95,27 @@ void OnFrame() {
 	//m_Camera.GetTransform()->Rotate(-1.0f, vec3(1.0f, 0.0f, 0.0f));
 
 	//Update camera rotation n shizz
-	int mx = Wish_Input_GetMouseX();
-	int my = Wish_Input_GetMouseY();
-	int dx = Wish_Input_GetMouseDX();
-	int dy = Wish_Input_GetMouseDY();
+	int mx = Wish_Get_Input()->GetMouseX();
+	int my = Wish_Get_Input()->GetMouseY();
+	int dx = Wish_Get_Input()->GetMouseDX();
+	int dy = Wish_Get_Input()->GetMouseDY();
 	//m_Camera.GetTransform()->Rotate((my * 0.1f), vec3(1.0f, 0.0f, 0.0f));
 	//m_Camera.GetTransform()->Rotate((mx * 0.1f), vec3(0.0f, 1.0f, 0.0f));
 	float sens = 0.1f;
-	fpsCamera.Yaw += dx * sens;
-	fpsCamera.Pitch += -dy * sens;
+	if (Wish_Engine_GetPlatform()->IsMouseLocked()) {
+		fpsCamera.Yaw += dx * sens;
+		fpsCamera.Pitch += -dy * sens;
+	}
 
 	if (fpsCamera.Pitch > 89.0f)
 		fpsCamera.Pitch = 89.0f;
 	if (fpsCamera.Pitch < -89.0f)
 		fpsCamera.Pitch = -89.0f;
-	if (fpsCamera.Yaw > 360.0f) 
+	if (fpsCamera.Yaw > 360.0f)
 		fpsCamera.Yaw = 0.0f;
-	if (fpsCamera.Yaw < 0.0f) 
+	if (fpsCamera.Yaw < 0.0f)
 		fpsCamera.Yaw = 360.0f;
-	
+
 
 	//yaw = (10.0f * glm::cos(glm::radians(someVal * 0.5f))) + 45.0f;
 
@@ -121,25 +123,25 @@ void OnFrame() {
 
 	//Calculate the direction vector
 
-	if (Wish_Input_IsKeyDown(WISH_SCANCODE_W)) {
+	if (Wish_Get_Input()->IsKeyDown(WISH_SCANCODE_W)) {
 		Wish_FPSCamera_MoveForward(&fpsCamera, 1.0f);
 	}
-	if (Wish_Input_IsKeyDown(WISH_SCANCODE_S)) {
+	if (Wish_Get_Input()->IsKeyDown(WISH_SCANCODE_S)) {
 		Wish_FPSCamera_MoveForward(&fpsCamera, -1.0f);
 	}
-	if (Wish_Input_IsKeyDown(WISH_SCANCODE_A)) {
+	if (Wish_Get_Input()->IsKeyDown(WISH_SCANCODE_A)) {
 		Wish_FPSCamera_Strafe(&fpsCamera, 1.0f);
 	}
-	if (Wish_Input_IsKeyDown(WISH_SCANCODE_D)) {
+	if (Wish_Get_Input()->IsKeyDown(WISH_SCANCODE_D)) {
 		Wish_FPSCamera_Strafe(&fpsCamera, -1.0f);
 	}
-	if (Wish_Input_IsKeyPressed(WISH_SCANCODE_1)) {
+	if (Wish_Get_Input()->IsKeyPressed(WISH_SCANCODE_1)) {
 		Wish_Engine_GetContext()->Renderer.ShowSSAO = !Wish_Engine_GetContext()->Renderer.ShowSSAO;
 	}
-	if (Wish_Input_IsKeyPressed(WISH_SCANCODE_T)) {
+	if (Wish_Get_Input()->IsKeyPressed(WISH_SCANCODE_T)) {
 		Wish_Engine_GetContext()->Renderer.ShowTextures = !Wish_Engine_GetContext()->Renderer.ShowTextures;
 	}
-	if (Wish_Input_IsKeyPressed(WISH_SCANCODE_SPACE)) {
+	if (Wish_Get_Input()->IsKeyPressed(WISH_SCANCODE_SPACE)) {
 		if (Wish_Engine_GetPlatform()->IsMouseLocked())
 		{
 			printf("TestApp::FreeMouse\n");
@@ -150,11 +152,11 @@ void OnFrame() {
 			printf("TestApp::LockMouse\n");
 			Wish_Engine_GetPlatform()->LockMouse();
 		}
-	
+
 	}
-	if (Wish_Input_IsKeyPressed(WISH_SCANCODE_R)) {
-		printf("Set Deferred rendering to %d\n", (!Wish_Engine_GetContext()->Renderer.m_DeferredRendering));
-		Wish_Engine_GetContext()->Renderer.m_DeferredRendering = !Wish_Engine_GetContext()->Renderer.m_DeferredRendering;
+	if (Wish_Get_Input()->IsKeyPressed(WISH_SCANCODE_R)) {
+		printf("Set Deferred rendering to %d\n", (!Wish_Engine_GetContext()->Renderer.DeferredRendering));
+		Wish_Engine_GetContext()->Renderer.DeferredRendering = !Wish_Engine_GetContext()->Renderer.DeferredRendering;
 	}
 
 	Wish_FPSCamera_Update(&fpsCamera);

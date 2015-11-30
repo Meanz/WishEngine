@@ -96,7 +96,7 @@ namespace Wish
 
 				//Texture
 				glEnableVertexAttribArray(1);
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
+				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, VertexSize, (void*)(3 * sizeof(GLfloat)));
 			}
 			if (MeshType == WISH_VERTEX_VNT)
 			{

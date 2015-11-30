@@ -3,8 +3,7 @@
 
 #include "targetver.h"
 #include <SDL.h>
-#include <WishCore.h>
-#include <WishPlatform.h>
+#include <Wish.h>
 #include "WishThreading.cpp"
 
 #include <iostream>
@@ -28,7 +27,6 @@ struct wish_engine_code
 	Wish_Engine_OnInit* OnInit;
 	Wish_Engine_OnReload* OnReload;
 	Wish_Engine_OnFixedUpdate* OnFixedUpdate;
-	Wish_Engine_OnUpdate* OnUpdate;
 	Wish_Engine_OnFrame* OnFrame;
 };
 
@@ -90,6 +88,7 @@ bool Wish_SDL_Init_Window(wish_game_state* state, char* windowName, i32 width, i
 	//If we couldn't create the window, exit
 	if (window.SDLWindow != NULL)
 	{
+
 		//OpenGL 3.1 Core
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -97,27 +96,40 @@ bool Wish_SDL_Init_Window(wish_game_state* state, char* windowName, i32 width, i
 
 		window.GLContext = SDL_GL_CreateContext(window.SDLWindow);
 
+
 		//If we couldn't create the GL context, destroy the window and exit
 		if (window.GLContext != NULL)
 		{
-			//Glew
-			GLenum glewError = glewInit();
-			//If we couldn't initialize GLew, destroy the window and exit
-			if (glewError == GLEW_OK)
+			if (SDL_GL_SetSwapInterval(1) == 0)
 			{
-				//Set member variables
-				window.Width = width;
-				window.Height = height;
-				window.Aspect = ((r32)width / (r32)height);
-				result = true;
+
+				//Glew
+				GLenum glewError = glewInit();
+				//If we couldn't initialize GLew, destroy the window and exit
+				if (glewError == GLEW_OK)
+				{
+					//Set member variables
+					window.Width = width;
+					window.Height = height;
+					window.Aspect = ((r32)width / (r32)height);
+					result = true;
+				}
+				else
+				{
+					printf("Could not create GL Context.\n");
+					SDL_SetError("Unable to initialize Glew");
+					SDL_DestroyWindow(window.SDLWindow);
+					window.SDLWindow = NULL;
+				}
 			}
 			else
 			{
-				printf("Could not create GL Context.\n");
-				SDL_SetError("Unable to initialize Glew");
+				printf("Could not set vsync.\n");
+				SDL_SetError("Unable to set vsync");
 				SDL_DestroyWindow(window.SDLWindow);
 				window.SDLWindow = NULL;
 			}
+
 		}
 		else
 		{
@@ -182,7 +194,6 @@ void LoadEngineCode(wish_engine_code* engineCode, char* file)
 		engineCode->OnInit = (Wish_Engine_OnInit*)SDL_LoadFunction(ptr, "_Wish_Engine_OnInit");
 		engineCode->OnReload = (Wish_Engine_OnInit*)SDL_LoadFunction(ptr, "_Wish_Engine_OnReload");
 		engineCode->OnFixedUpdate = (Wish_Engine_OnFixedUpdate*)SDL_LoadFunction(ptr, "_Wish_Engine_OnFixedUpdate");
-		engineCode->OnUpdate = (Wish_Engine_OnUpdate*)SDL_LoadFunction(ptr, "_Wish_Engine_OnUpdate");
 		engineCode->OnFrame = (Wish_Engine_OnFrame*)SDL_LoadFunction(ptr, "_Wish_Engine_OnFrame");
 	}
 	else
@@ -211,7 +222,7 @@ int main(int argc, char* argv[])
 
 	u32 toAlloc = Megabytes(512);
 	wish_game_memory* memory = (wish_game_memory*)SDL_malloc(toAlloc);
-	
+
 	//Offset the perm memory to start + wish_game_memory
 	memory->PermMemory = (void*)(((u8*)memory + sizeof(wish_game_memory)));
 	memory->PermMemSize = toAlloc - sizeof(wish_game_memory);
@@ -225,7 +236,7 @@ int main(int argc, char* argv[])
 
 	wish_game_code gameCode;
 	SDL_zero(gameCode);
-	LoadGameCode(&gameCode, "./Debug/TestApp.dll");
+	LoadGameCode(&gameCode, "./Debug/LandsOfSonketo.dll");
 
 	//The number of ticks per second
 	const u32 TICKS_PER_SECOND = 30;
@@ -233,12 +244,6 @@ int main(int argc, char* argv[])
 	const u32 SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	//Max number of frames to skip if we are "lagging" before we run the next time
 	const u32 MAX_FRAMESKIP = 10;
-
-	//The timestamp for the next tick
-	u32 nextGameTick = SDL_GetTicks();
-
-	//Variable to check how many frames we have skipped
-	int loops;
 
 	//Interpolation value between this frame and last frame for smooth animation
 	float interpolation;
@@ -261,23 +266,29 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	//GameLoop Related stuff
+	u32 targetFrameRate = 59;
+	r64 ticksPerFrame = 1000 / targetFrameRate;
+	//The timestamp for the next tick
+	u32 nextGameTick = SDL_GetTicks();
+	u32 lastFrame = SDL_GetTicks();
+	u32 frameStart, frameEnd, frameDelta;
+
 	SDL_StartTextInput();
-
-	b32 inputHasChanged = false;
-
+	b32 inputHasChanged = true;
 	while (state.IsRunning) {
 		//frameInfo.frameDelta = SDL_GetTicks() - frameInfo.frameTimestamp;
 		//frameInfo.frameTimestamp = SDL_GetTicks();
 
-		loops = 0;
+		/*loops = 0;
 		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP) {
-			if (engineCode.Handle && engineCode.OnFixedUpdate)
-			{
-				engineCode.OnFixedUpdate(&state, memory);
-			}
-			nextGameTick += SKIP_TICKS;
-			loops++;
+		if (engineCode.Handle && engineCode.OnFixedUpdate)
+		{
+		engineCode.OnFixedUpdate(&state, memory);
 		}
+		nextGameTick += SKIP_TICKS;
+		loops++;
+		}*/
 
 		//
 		//##### BEGIN INPUT #####
@@ -293,25 +304,24 @@ int main(int argc, char* argv[])
 			inputHasChanged = false;
 		}
 
+		//SDL_PumpEvents();
+
 		SDL_Event e;
 		while (SDL_PollEvent(&e) != 0)
 		{
-			//User requests quit
-			if (e.type == SDL_QUIT)
+			switch (e.type)
 			{
+			case SDL_QUIT:
 				state.IsRunning = false;
-			}
-			//Handle keypress with current mouse position
-			else if (e.type == SDL_TEXTINPUT)
-			{
-				int x = 0, y = 0;
-				SDL_GetMouseState(&x, &y);
+				break;
+
+			case SDL_TEXTINPUT:
 				//handleKeys(e.text.text[0], x, y);
 
 				//printf("Input: %c\n", e.text.text[0]);
+				break;
 
-			}
-			else if (e.type == SDL_KEYDOWN) {
+			case SDL_KEYDOWN:
 				if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
 					state.IsRunning = false;
 				}
@@ -322,8 +332,9 @@ int main(int argc, char* argv[])
 					state.Input.KeysDown[e.key.keysym.scancode] = true;
 				}
 				inputHasChanged = true;
-			}
-			else if (e.type == SDL_KEYUP) {
+				break;
+
+			case SDL_KEYUP:
 				state.Input.KeysDown[e.key.keysym.scancode] = false;
 				state.Input.KeysReleased[e.key.keysym.scancode] = true;
 				inputHasChanged = true;
@@ -346,26 +357,33 @@ int main(int argc, char* argv[])
 						if (engineCode.Handle && engineCode.OnReload) {
 							engineCode.OnReload(&state, memory);
 						}
-					} 
+					}
 					else
 					{
 						printf("Unload the engine code first\n");
 					}
 				}
-			}
-			else if (e.type == SDL_MOUSEBUTTONDOWN) {
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
 				if (!state.Input.MouseButtonsDown[e.button.button]) {
 					state.Input.MouseButtonsPressed[e.button.button] = true;
 				}
 				state.Input.MouseButtonsDown[e.button.button] = true;
 				inputHasChanged = true;
-			}
-			else if (e.type == SDL_MOUSEBUTTONUP) {
+				break;
+
+			case SDL_MOUSEBUTTONUP:
 				state.Input.MouseButtonsDown[e.button.button] = false;
 				state.Input.MouseButtonsReleased[e.button.button] = true;
 				inputHasChanged = true;
+				break;
+
+			default:
+				break;
 			}
 		}
+
 
 		//Look into this
 		if (isMouseLocked)
@@ -383,44 +401,52 @@ int main(int argc, char* argv[])
 			state.Input.MouseDX = state.Input.MouseX - lastX;
 			state.Input.MouseDY = state.Input.MouseY - lastY;
 		}
-		
+
 		//
 		//##### END INPUT #####
 		//
 
-		//Shoot update
-		if (engineCode.Handle && engineCode.OnUpdate)
+		//Frame limiter
+		
+		//if (SDL_GetTicks() - lastFrame > floor(ticksPerFrame))
 		{
-			engineCode.OnUpdate(&state, memory);
+			frameStart = SDL_GetTicks();
+			//Calculate interpolation
+			interpolation = (SDL_GetTicks() - lastFrame) / (r32)ticksPerFrame;
+
+			//Draw frame
+			if (engineCode.Handle && engineCode.OnFrame)
+			{
+				engineCode.OnFrame(&state, memory);
+			}
+
+			//Increment fps count
+			fps++;
+
+			//If we have reached fps time
+			if (SDL_GetTicks() - lastFpsCount > 1000) {
+				//frameInfo.fps = fps;
+				state.FPS = fps;
+				fps = 0;
+				lastFpsCount = SDL_GetTicks();
+			}
+
+			//Swap buffers
+			SDL_GL_SwapWindow(window.SDLWindow);
+
+			frameEnd = SDL_GetTicks();
+			frameDelta = (frameEnd - frameStart) + 1;
+
+			//Sleep
+			if (frameDelta < floor(ticksPerFrame))
+			{
+				//Sleep((i32)floor(ticksPerFrame) - frameDelta);
+			}
+			else
+			{
+				//printf("Running behind, frame took %i ms\n", frameDelta);
+			}
 		}
-
-		//Shoot frame
-		if (engineCode.Handle && engineCode.OnFrame)
-		{
-			engineCode.OnFrame(&state, memory);
-		}
-
-		//Calculate interpolation
-		interpolation = float(SDL_GetTicks() + SKIP_TICKS - nextGameTick)
-			/ float(SKIP_TICKS);
-
-		//Store frame information
-		//FrameInfo.interpolation = interpolation
-		//FrameInfo.lastRenderTime = lastRenderTime
-		//Etc...
-
-		//Render objects
-		//OnFrame(&frameInfo);
-		fps++;
-
-		if (SDL_GetTicks() - lastFpsCount > 1000) {
-			//frameInfo.fps = fps;
-			fps = 0;
-			lastFpsCount = SDL_GetTicks();
-		}
-
-		//Swap frame
-		SDL_GL_SwapWindow(window.SDLWindow);
 	}
 
 	SDL_StopTextInput();

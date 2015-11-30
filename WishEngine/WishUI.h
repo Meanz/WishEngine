@@ -34,7 +34,7 @@ namespace Wish
 
 		
 		void Init();
-		void DebugString(const char* str, i32 x, i32 y);
+		void DebugString(const char* str, r32 x, r32 y);
 		void Rect(i32 x, i32 y, i32 w, i32 h, u32 color);
 
 		//

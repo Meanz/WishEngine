@@ -19,10 +19,24 @@ namespace Wish
 
 	};
 
+	enum PixelType
+	{
+		PIXELTYPE_FLOAT = GL_FLOAT,
+		PIXELTYPE_UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
+		PIXELTYPE_UNSIGNED_SHORT = GL_UNSIGNED_SHORT
+	};
+
+	enum TextureFilter
+	{
+		FILTER_NEAREST = GL_NEAREST,
+		FILTER_LINEAR = GL_LINEAR
+	};
+
 	//Oh dear!
 	enum PixelFormat
 	{
 #if WISH_RENDERER == WISH_OPENGL
+		MONOCHROME = GL_ALPHA,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
 		RGBA16F = GL_RGBA16F,
@@ -38,6 +52,11 @@ namespace Wish
 	{
 		GLuint glHandle;
 		GLuint width, height;
+
+		static wish_texture Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType);
+		static wish_texture Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType, void* data);
+		static wish_texture Create(TextureFilter minFilter, TextureFilter magFilter, u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType);
+		static wish_texture Create(TextureFilter minFilter, TextureFilter magFilter, u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType, void* data);
 	};
 
 	void Wish_Texture_Create(wish_texture* texture);

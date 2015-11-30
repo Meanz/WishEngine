@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Projects\C++\WishEngine\thirdparty\freetype-2.4.0\include;D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\include;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\include;D:\Projects\C++\WishEngine\thirdparty\glm\glm;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;D:\Projects\C++\WishEngine\WishEngine;D:\Projects\C++\WishEngine\thirdparty\LuaJIT-2.0.4\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(ThirdPartyLibraries);D:\Projects\C++\WishEngine\Debug;$(WindowsSDK_LibraryPath_x86);D:\Projects\C++\WishEngine\thirdparty\freetype-2.4.0\objs\win32\vc2008;D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\lib\x86;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\lib\Release\Win32;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\lib\x86;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\lib32;</LibraryPath>
+    <IncludePath>D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\include;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\include;D:\Projects\C++\WishEngine\thirdparty\glm\glm;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;D:\Projects\C++\WishEngine\WishEngine;D:\Projects\C++\WishEngine\thirdparty\LuaJIT-2.0.4\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(ThirdPartyLibraries);D:\Projects\C++\WishEngine\Debug;$(WindowsSDK_LibraryPath_x86);D:\Projects\C++\WishEngine\thirdparty\SDL2-2.0.3\lib\x86;D:\Projects\C++\WishEngine\thirdparty\glew-1.12.0\lib\Release\Win32;D:\Projects\C++\WishEngine\thirdparty\SDL2_image-2.0.0\lib\x86;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\include;D:\Projects\C++\WishEngine\thirdparty\assimp-3.1.1-win-binaries\lib32</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;opengl32.lib;WishEngine.lib;freetype240MT_D.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;opengl32.lib;WishEngine.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

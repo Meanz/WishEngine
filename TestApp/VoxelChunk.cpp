@@ -21,7 +21,7 @@
     elapsedTime=(float)(t2.QuadPart-t1.QuadPart)/(frequency.QuadPart/1000); \
     std::wcout<<elapsedTime<<L" ms"<<endl;
 
-VoxelChunk::VoxelChunk(size_t x, size_t y) : WishGeometry("VoxelChunk")
+VoxelChunk::VoxelChunk(size_t x, size_t y) : wish_geometry("VoxelChunk")
 {
 	m_X = x;
 	m_Y = y;
@@ -197,7 +197,7 @@ void VoxelChunk::Build() {
 	//Do normal smoothing
 	size_t vertexCount = indices.size();
 
-	for( int i = 0; i < vertexCount; i += 3 )
+	for( u32 i = 0; i < vertexCount; i += 3 )
 	{
 		// get the three vertices that make the faces
 		glm::vec3 p0 = vertices[indices[i + 0]].position;
@@ -217,7 +217,7 @@ void VoxelChunk::Build() {
 
 
 	// Now loop through each vertex vector, and avarage out all the normals stored.
-	for( int i = 0; i < vertices.size(); ++i )
+	for( u32 i = 0; i < vertices.size(); ++i )
 	{
 		vertices[i].normal = glm::normalize(vertices[i].normal);
 	}

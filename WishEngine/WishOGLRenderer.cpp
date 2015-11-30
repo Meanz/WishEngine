@@ -11,6 +11,9 @@
 #include "WishOGLFramebuffer.cpp"
 #include "WishOGLDeferredRenderer.cpp"
 
+//:P
+#include "WishFontRenderer.hpp"
+
 //Meh
 #include "WishOBJLoader.h"
 
@@ -215,12 +218,19 @@ namespace Wish
 		glColor3f(1.0f, 1.0f, 1.0f);
 		Wish_Texture_Bind(NULL, GL_TEXTURE0);
 
-		Wish_Get_UI()->DebugString((std::string("FPS: ") + std::to_string(Wish_Engine_GetFPS())).c_str(), 10, 10);
-		Wish_Get_UI()->DebugString((std::string("Flush: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_Flush))).c_str(), 10, 25);
-		Wish_Get_UI()->DebugString((std::string("GBuffer: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_GBuffer))).c_str(), 10, 40);
-		Wish_Get_UI()->DebugString((std::string("PostProcessing: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_PostProcessing))).c_str(), 10, 55);
-		Wish_Get_UI()->DebugString((std::string("Geometry Objects: ") + std::to_string(NumGeometries)).c_str(), 10, 70);
+		//Set our UI shader
+		//Wish_Renderer_SetShaderProgram(Wish_Get_UI()->UIProgram);
+		//Wish_Renderer_ApplyUniforms(Wish_Get_UI()->UIProgram, nullptr, nullptr);
 
+
+		//drawThing();
+
+		Wish_Get_UI()->DebugString((std::string("FPS: ") + std::to_string(Wish_Engine_GetFPS())).c_str(), 5, 15);
+		Wish_Get_UI()->DebugString((std::string("Flush: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_Flush))).c_str(), 5, 30);
+		Wish_Get_UI()->DebugString((std::string("GBuffer: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_GBuffer))).c_str(), 5, 45);
+		Wish_Get_UI()->DebugString((std::string("PostProcessing: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_PostProcessing))).c_str(), 5, 60);
+		Wish_Get_UI()->DebugString((std::string("Geometry Objects: ") + std::to_string(NumGeometries)).c_str(), 5, 75);
+		
 		//Draw UI!
 		Wish_Get_UI()->Draw();
 

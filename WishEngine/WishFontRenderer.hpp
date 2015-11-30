@@ -4,50 +4,40 @@
 
 namespace Wish
 {
+#define MAX_GLYPHS 256
 
-	//Inside of this namespace, give ourselves the ability
-	//to write just "vector" instead of "std::vector"
-	using std::vector;
-
-	//Ditto for string.
-	using std::string;
-
-	//This holds all of the information related to any
-	//freetype font that we want to create.  
-	struct font_data {
-		float h;			///< Holds the height of the font.
-		GLuint * textures;	///< Holds the texture id's 
-		GLuint list_base;	///< Holds the first display list id
-
-		//The init function will create a font of
-		//of the height h from the file fname.
-		void init(const char * fname, unsigned int h);
-
-		//Free all the resources assosiated with the font.
-		void clean();
+	struct wish_font_glyph
+	{
+		u32 Codepoint;
+		r32 Width, Height;
+		r32 u0, v0, u1, v1;
+		r32 Kerning;
+		r32 Ascent;
+		r32 Descent;
+		r32 LineGap;
 	};
 
-	//The flagship function of the library - this thing will print
-	//out text at window coordinates x,y, using the font ft_font.
-	//The current modelview matrix will also be applied to the text. 
-	void print(const font_data &ft_font, float x, float y, const char *fmt, ...);
-
-
-	class FreetypeFont
+	struct wish_font_glyph2
 	{
-	private:
-		float m_Height; //Holds the height of the font
-		GLuint* m_Textures; //Holds texture ids
-		GLuint m_ListBase; //Holds the first display list id
+		unsigned short x0, y0, x1, y1; // coordinates of bbox in bitmap
+		float xoff, yoff, xadvance;
+	};
+
+	class wish_font
+	{
 
 	public:
+		wish_texture FontTexture;
+		wish_font_glyph2 GlyphData[MAX_GLYPHS];
+		wish_font_glyph Glyphs[MAX_GLYPHS];
+		r32 FontSize;
 
-		FreetypeFont();
-		~FreetypeFont();
+		wish_font();
+		~wish_font();
 
-		bool LoadFont(std::string fontPath, unsigned int height);
-		void DeleteFont();
-		void GLDraw(std::string str, float x, float y);
+		void MakeTextMesh(wish_mesh* mesh, r32 x, r32 y, const char* what);
+		b32 LoadFont(const char* location, r32 pixelHeight);
+		void Print(const char* what, r32 x, r32 y);
 
 	};
 };

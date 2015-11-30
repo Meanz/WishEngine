@@ -2,7 +2,7 @@
 
 #include "VoxelChunk.hpp"
 
-class VoxelTerrain : public WishGameObject
+class VoxelTerrain : public wish_game_object
 {
 
 private:

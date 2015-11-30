@@ -228,6 +228,9 @@
     <ClInclude Include="WishUIPanel.h">
       <Filter>Header Files\Engine\Render\UI</Filter>
     </ClInclude>
+    <ClInclude Include="stb_truetype.h">
+      <Filter>Header Files\Engine\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

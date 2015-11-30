@@ -7,7 +7,7 @@
 
 namespace Wish { class ShaderProgram; };
 
-class VoxelChunk : public WishGeometry
+class VoxelChunk : public wish_geometry
 {
 
 private:

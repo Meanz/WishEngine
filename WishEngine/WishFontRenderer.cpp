@@ -1,16 +1,265 @@
 #include "stdafx.h"
 #include "Wish.h"
 
-//FreeType Headers
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_GLYPH_H
-#include FT_OUTLINE_H
-#include FT_TRIGONOMETRY_H
+#define STB_TRUETYPE_IMPLEMENTATION 1
+#include "stb_truetype.h"
 
 #include "WishFontRenderer.hpp"
 
 namespace Wish {
+
+	u8 tmpBitmap[512 * 512 * 4];
+	u8 tmpMonochrome[512 * 512];
+
+	wish_texture ftex;
+
+	wish_mesh mesh;
+
+	wish_font::wish_font()
+	{
+
+	}
+
+	wish_font::~wish_font()
+	{
+
+	}
+
+	b32 wish_font::LoadFont(const char* fileName, r32 pixelHeight)
+	{
+		this->FontSize = pixelHeight;
+		i32 iWidth = 512;
+		i32 iHeight = 512;
+		u8* ttf_buffer = Wish_IO_ReadFile(fileName);
+		if (true)
+		{
+			u8* tmpGreyscale = (u8*)Wish_Memory_Alloc(iWidth * iHeight);
+			u8* tmpColorMultiplied = (u8*)Wish_Memory_Alloc(iWidth * iHeight * 4);
+			stbtt_BakeFontBitmap(ttf_buffer, stbtt_GetFontOffsetForIndex(ttf_buffer, 0), pixelHeight, tmpGreyscale, iWidth, iHeight, 32, 96, (stbtt_bakedchar*)this->GlyphData);
+			//Do texture thingymajig
+			i32 idx = 0;
+			u32 alpha;
+			for (i32 x = 0; x < iWidth; x++)
+			{
+				for (i32 y = 0; y < iHeight; y++)
+				{
+					idx = x + (y * iWidth);
+					alpha = tmpGreyscale[idx];
+					*((u32*)&tmpColorMultiplied[idx * 4]) = (alpha << 24) | (alpha << 16) | (alpha << 8) | (alpha << 0);
+				}
+			}
+			FontTexture = wish_texture::Create(FILTER_LINEAR, FILTER_LINEAR, iWidth, iHeight, RGBA, RGBA, PIXELTYPE_UNSIGNED_BYTE, tmpColorMultiplied);
+			Wish_Memory_Free(tmpColorMultiplied);
+			//Wish_Memory_Free(tmpGreyscale);
+			return true;
+		}
+
+		b32 result = false;
+
+		{
+
+			//
+			stbtt_fontinfo Font;
+			stbtt_InitFont(&Font, (u8*)ttf_buffer, 0);
+
+			//
+			const u32 numChars = 78 + 5;
+			u8 chars[] = {
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '[', ']', '{', '}', '(', ')', '/', '\\', '&', '%', '-', '+', '*', ',', '.', '_',
+				':', ';', '\'', '<', '>'
+			};
+
+			//
+			i32 xPos = 0;
+			i32 yPos = 0;
+			i32 yMax = 0;
+
+			//
+			i32 width, height, xOffset, yOffset, advanceX, leftSideBearing, ascent, descent, lineGap;
+			u8 alpha;
+			for (i32 i = 0; i < numChars; i++)
+			{
+				//Also fetch information about the character
+				i32 codepoint = chars[i];
+				if (codepoint > MAX_GLYPHS) {
+					assert(false);
+				}
+				wish_font_glyph* glyph = &Glyphs[codepoint];
+
+				stbtt_GetCodepointHMetrics(&Font, codepoint, &advanceX, &leftSideBearing);
+				stbtt_GetFontVMetrics(&Font, &ascent, &descent, &lineGap);
+
+				glyph->Kerning = (r32)advanceX * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
+				glyph->Ascent = (r32)ascent * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
+				glyph->Descent = (r32)descent * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
+				glyph->LineGap = (r32)lineGap * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
+
+				//Allocate
+				u8* bitmap = stbtt_GetCodepointBitmap(&Font, 0, stbtt_ScaleForPixelHeight(&Font, pixelHeight), chars[i], &width, &height, &xOffset, &yOffset);
+
+				//Blit it onto our texture thing
+				if (height > yMax) {
+					yMax = height;
+				}
+
+				//Check if the glyph fits
+				if (xPos + width >= iWidth) {
+					yPos += yMax;
+					xPos = 0;
+					yMax = 0;
+				}
+
+				//Check for bounds
+				if (xPos + width >= iWidth || yPos + height >= iHeight) {
+					assert(false);
+				}
+
+				//We have x and y pos, blit glyph
+				u32 pos = 0;
+				for (i32 x = 0; x < width; x++) {
+					for (i32 y = 0; y < height; y++) {
+						alpha = bitmap[x + (y * width)];
+						pos = ((xPos + x) + ((yPos + y) * iWidth)) * 4;
+						if (pos >= (512 * 512 * 4)) {
+							assert(false);
+						}
+						*((u32*)&tmpBitmap[pos]) = (alpha << 24) | (alpha << 16) | (alpha << 8) | (alpha << 0);
+					}
+				}
+
+				glyph->Width = (r32)width;
+				glyph->Height = (r32)height;
+				glyph->u0 = (r32)xPos / (r32)iWidth;
+				glyph->v1 = ((r32)yPos) / (r32)iHeight;
+				glyph->u1 = ((r32)xPos + (r32)width) / (r32)iWidth;
+				glyph->v0 = ((r32)yPos + (r32)height) / (r32)iHeight;
+
+				//Advance xpos
+				xPos += width;
+
+				//Free
+				stbtt_FreeBitmap(bitmap, 0);
+
+			}
+
+			FontTexture = wish_texture::Create(FILTER_NEAREST, FILTER_NEAREST, iWidth, iHeight, RGBA, RGBA, PIXELTYPE_UNSIGNED_BYTE, tmpBitmap);
+			//Wish_Primitive_Rect_VT(&mesh, 0, 0, (r32)iWidth, (r32)iHeight);
+
+			//Free
+			if (ttf_buffer)
+			{
+				//Wish_Memory_Free(ttf_buffer);
+			}
+		}
+
+		return result;
+	}
+
+
+	void wish_font::MakeTextMesh(wish_mesh* mesh, r32 x, r32 y, const char* str)
+	{
+		i32 cnt = strlen(str);
+
+		Vertex_VT* vertices = (Vertex_VT*)Wish_Memory_Alloc(cnt * 4 * sizeof(Vertex_VT));
+		u32* indices = (u32*)Wish_Memory_Alloc(cnt * 6 * sizeof(u32));
+
+		u32 vtOff = 0;
+		u32 iOff = 0;
+		u32 cvtOff = 0;
+
+		r32 xOff = x;
+		r32 yOff = y;
+		for (i32 i = 0; i < cnt; i++)
+		{
+			if (str[i] < MAX_GLYPHS) {
+
+				stbtt_aligned_quad q;
+				stbtt_GetBakedQuad((stbtt_bakedchar*)this->GlyphData, 512, 512, (i32)str[i] - 32, &xOff, &yOff, &q, 1);
+				//3----2
+				//|    |
+				//|    |
+				//0----1
+
+				r32 w = q.x1 - q.x0;
+				r32 h = q.y1 - q.y0;
+
+				r32 u0 = q.s0;
+				r32 u1 = q.s1;
+				r32 v0 = q.t1;
+				r32 v1 = q.t0;
+
+				r32 xMin = q.x0;
+				r32 xMax = xMin + w;
+				r32 yMin = q.y0;
+				r32 yMax = q.y1;
+
+				cvtOff = vtOff;
+				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMin, 0.0), v2(u0, v1) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMin, 0.0), v2(u1, v1) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMax, 0.0), v2(u1, v0) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMax, 0.0), v2(u0, v0) };
+				indices[iOff++] = cvtOff + 0;
+				indices[iOff++] = cvtOff + 1;
+				indices[iOff++] = cvtOff + 2;
+				indices[iOff++] = cvtOff + 2;
+				indices[iOff++] = cvtOff + 3;
+				indices[iOff++] = cvtOff + 0;
+
+				//xOff += glyph->Width - (glyph->Kerning / FontTexture.width);
+
+			}
+			else {
+				vtOff += 4;
+				iOff += 6;
+			}
+		}
+		mesh->MeshType = WISH_VERTEX_VT;
+		mesh->SetVertices((r32*)vertices, cnt * 4);
+		mesh->SetIndices(indices, cnt * 6);
+		//Or, deferr compilation
+		mesh->Compile();
+		//Delete data
+		mesh->Vertices = 0;
+		mesh->Indices = 0;
+		Wish_Memory_Free(vertices);
+		Wish_Memory_Free(indices);
+	}
+
+	void wish_font::Print(const char* what, r32 x, r32 y)
+	{
+		//Do stuff
+
+		//Set our UI shader
+		Wish_Renderer_SetShaderProgram(Wish_Get_UI()->UIProgram);
+
+		//Apply values too
+		wish_material test;
+		ZeroMemory(&test, sizeof(wish_material));
+		test.Color = v4(1.0, 1.0, 1.0, 1.0);
+		test.Albedo = &FontTexture;
+
+		//
+		Wish_Renderer_BindTexture(0, &FontTexture);
+
+		//Apply transformation matrix for this panel
+		v2 GlobalPosition(x, y);
+		Wish_Renderer_SetWorldMatrix(glm::translate(m4(1.0), v3(GlobalPosition.x, Wish_Window_GetHeight() - GlobalPosition.y, 0)));
+
+		//
+		Wish_Renderer_ApplyUniforms(Wish_Renderer_GetShaderProgram(), &test, NULL);
+
+		//Update mesh per frame
+		MakeTextMesh(&mesh, 0, 0, what);
+		 
+		//Draw mesh
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		mesh.Draw();
+		glDisable(GL_BLEND);
+	}
+
 
 	///This function gets the first power of 2 >= the
 	///int that we pass it.
@@ -20,223 +269,4 @@ namespace Wish {
 		while (rval < a) rval <<= 1;
 		return rval;
 	}
-
-	///Create a display list coresponding to the give character.
-	void make_dlist(FT_Face face, char ch, GLuint list_base, GLuint * tex_base) {
-
-		//The first thing we do is get FreeType to render our character
-		//into a bitmap.  This actually requires a couple of FreeType commands:
-
-		//Load the Glyph for our character.
-		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, ch), FT_LOAD_DEFAULT))
-			throw std::runtime_error("FT_Load_Glyph failed");
-
-		//Move the face's glyph into a Glyph object.
-		FT_Glyph glyph;
-		if (FT_Get_Glyph(face->glyph, &glyph))
-			throw std::runtime_error("FT_Get_Glyph failed");
-
-		//Convert the glyph to a bitmap.
-		FT_Glyph_To_Bitmap(&glyph, FT_Render_Mode::FT_RENDER_MODE_NORMAL, 0, 1);
-		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-
-		//This reference will make accessing the bitmap easier
-		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
-
-		//Use our helper function to get the widths of
-		//the bitmap data that we will need in order to create
-		//our texture.
-		int width = next_p2(bitmap.width);
-		int height = next_p2(bitmap.rows);
-
-		//Allocate memory for the texture data.
-		GLubyte* expanded_data = new GLubyte[2 * width * height];
-
-		//Here we fill in the data for the expanded bitmap.
-		//Notice that we are using two channel bitmap (one for
-		//luminocity and one for alpha), but we assign
-		//both luminocity and alpha to the value that we
-		//find in the FreeType bitmap. 
-		//We use the ?: operator so that value which we use
-		//will be 0 if we are in the padding zone, and whatever
-		//is the the Freetype bitmap otherwise.
-		for (int j = height - 1; j >= 0; j--) {
-			for (int i = 0; i < width; i++){
-				expanded_data[2 * (i + j*width)] = expanded_data[2 * (i + j*width) + 1] =
-					(i >= bitmap.width || j >= bitmap.rows) ?
-					0 : bitmap.buffer[i + bitmap.width*j];
-			}
-		}
-
-
-		//Now we just setup some texture paramaters.
-		glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		//Here we actually create the texture itself, notice
-		//that we are using GL_LUMINANCE_ALPHA to indicate that
-		//we are using 2 channel data.
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-			0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data);
-
-		//With the texture created, we don't need to expanded data anymore
-		delete[] expanded_data;
-
-		//So now we can create the display list
-		glNewList(list_base + ch, GL_COMPILE);
-
-		glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
-
-		glPushMatrix();
-
-		//first we need to move over a little so that
-		//the character has the right amount of space
-		//between it and the one before it.
-		glTranslatef(GLfloat(bitmap_glyph->left), 0, 0);
-
-		//Now we move down a little in the case that the
-		//bitmap extends past the bottom of the line 
-		//(this is only true for characters like 'g' or 'y'.
-		glTranslatef(0, GLfloat(bitmap_glyph->top - bitmap.rows), 0);
-
-		//Now we need to account for the fact that many of
-		//our textures are filled with empty padding space.
-		//We figure what portion of the texture is used by 
-		//the actual character and store that information in 
-		//the x and y variables, then when we draw the
-		//quad, we will only reference the parts of the texture
-		//that we contain the character itself.
-		float x = (float)bitmap.width / (float)width;
-		float y = (float)bitmap.rows / (float)height;
-
-		//Here we draw the texturemaped quads.
-		//The bitmap that we got from FreeType was not 
-		//oriented quite like we would like it to be,
-		//so we need to link the texture to the quad
-		//so that the result will be properly aligned.
-		glBegin(GL_QUADS);
-		glTexCoord2d(0, 0); glVertex2f(0, GLfloat(bitmap.rows));
-		glTexCoord2d(0, y); glVertex2f(0, 0);
-		glTexCoord2d(x, y); glVertex2f(GLfloat(bitmap.width), 0);
-		glTexCoord2d(x, 0); glVertex2f(GLfloat(bitmap.width), GLfloat(bitmap.rows));
-		glEnd();
-		glPopMatrix();
-		glTranslatef(GLfloat(face->glyph->advance.x >> 6), 0, 0);
-
-
-		//increment the raster position as if we were a bitmap font.
-		//(only needed if you want to calculate text length)
-		//glBitmap(0,0,0,0,face->glyph->advance.x >> 6,0,NULL);
-
-		//Finnish the display list
-		glEndList();
-	}
-
-	void font_data::clean() {
-		glDeleteLists(list_base, 128);
-		glDeleteTextures(128, textures);
-		delete[] textures;
-	}
-
-	FreetypeFont::FreetypeFont()
-	{
-
-	}
-
-	FreetypeFont::~FreetypeFont()
-	{
-
-	}
-
-	bool FreetypeFont::LoadFont(std::string fontPath, unsigned int height)
-	{
-		//Allocate some memory to store the texture ids.
-		m_Textures = new GLuint[128];
-
-		this->m_Height = float(height);
-
-		//Create and initilize a freetype font library.
-		FT_Library library;
-		if (FT_Init_FreeType(&library))
-			throw std::runtime_error("FT_Init_FreeType failed");
-
-		//The object in which Freetype holds information on a given
-		//font is called a "face".
-		FT_Face face;
-
-		//This is where we load in the font information from the file.
-		//Of all the places where the code might die, this is the most likely,
-		//as FT_New_Face will die if the font file does not exist or is somehow broken.
-		if (FT_New_Face(library, fontPath.c_str(), 0, &face))
-			throw std::runtime_error("FT_New_Face failed (there is probably a problem with your font file)");
-
-		//For some twisted reason, Freetype measures font size
-		//in terms of 1/64ths of pixels.  Thus, to make a font
-		//h pixels high, we need to request a size of h*64.
-		//(h << 6 is just a prettier way of writting h*64)
-		FT_Set_Char_Size(face, height << 6, height << 6, 96, 96);
-
-		//Here we ask opengl to allocate resources for
-		//all the textures and displays lists which we
-		//are about to create.  
-		m_ListBase = glGenLists(128);
-		glGenTextures(128, m_Textures);
-
-		//This is where we actually create each of the fonts display lists.
-		for (unsigned char i = 0; i < 128; i++)
-			make_dlist(face, i, m_ListBase, m_Textures);
-
-		//We don't need the face information now that the display
-		//lists have been created, so we free the assosiated resources.
-		FT_Done_Face(face);
-
-		//Ditto for the library.
-		FT_Done_FreeType(library);
-
-		return true;
-	}
-
-	void FreetypeFont::DeleteFont()
-	{
-
-	}
-
-	void FreetypeFont::GLDraw(std::string str, float x, float y)
-	{
-		GLuint font = m_ListBase;
-		float h = m_Height / .63f;						//We make the height about 1.5* that of
-
-		//glPushAttrib(GL_LIST_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT | GL_TRANSFORM_BIT);
-		//glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//This is where the text display actually happens.
-		//For each line of text we reset the modelview matrix
-		//so that the line's text will start in the correct position.
-		//Notice that we need to reset the matrix, rather than just translating
-		//down by h. This is because when each character is
-		//draw it modifies the current matrix so that the next character
-		//will be drawn immediatly after it.  
-		glListBase(font);
-		glPushMatrix();
-		{
-			glTranslatef(x, y + h, 0);
-			glScalef(1.0f, -1.0f, 1.0f);
-			//  The commented out raster position stuff can be useful if you need to
-			//  know the length of the text that you are creating.
-			//  If you decide to use it make sure to also uncomment the glBitmap command
-			//  in make_dlist().
-			//	glRasterPos2f(0,0);
-			glCallLists(str.length(), GL_UNSIGNED_BYTE, str.c_str());
-			//	float rpos[4];
-			//	glGetFloatv(GL_CURRENT_RASTER_POSITION ,rpos);
-			//	float len=x-rpos[0];
-		}
-		glPopMatrix();
-		glDisable(GL_BLEND);
-		//glPopAttrib();
-	}
-
 };

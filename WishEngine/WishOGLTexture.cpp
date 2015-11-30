@@ -1,6 +1,42 @@
 //This one is temp
 #include <SDL_image.h>
 
+namespace Wish
+{
+
+	wish_texture wish_texture::Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType)
+	{
+		return wish_texture::Create(FILTER_NEAREST, FILTER_NEAREST, width, height, pixelFormatStore, pixelFormatIn, pixelType, NULL);
+	}
+
+	wish_texture wish_texture::Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType, void* data)
+	{
+		return wish_texture::Create(FILTER_NEAREST, FILTER_NEAREST, width, height, pixelFormatStore, pixelFormatIn, pixelType, data);
+	}
+
+	wish_texture wish_texture::Create(TextureFilter minFilter, TextureFilter magFilter, u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType)
+	{
+		return wish_texture::Create(minFilter, magFilter, width, height, pixelFormatStore, pixelFormatIn, pixelType, NULL);
+	}
+
+	wish_texture wish_texture::Create(TextureFilter minFilter, TextureFilter magFilter, u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType, void* data)
+	{
+		wish_texture tmp;
+		Wish_Texture_Create(&tmp);
+		glEnable(GL_TEXTURE_2D);
+		tmp.width = width;
+		tmp.height = height;
+		glBindTexture(GL_TEXTURE_2D, tmp.glHandle);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLfloat)minFilter);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLfloat)magFilter);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage2D(GL_TEXTURE_2D, 0, pixelFormatStore, width, height, 0, pixelFormatIn, pixelType, data);
+		return tmp;
+	}
+
+};
+
 void Wish::Wish_Texture_Create(wish_texture* texture) {
 	glGenTextures(1, &texture->glHandle);
 	ASSERT(texture->glHandle != 0);

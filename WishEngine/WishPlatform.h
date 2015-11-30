@@ -24,6 +24,7 @@ struct wish_game_state
 	wish_window Window;
 	wish_platform Platform;
 
+	u32 FPS;
 	b32 IsEngineInitialized;
 	b32 IsInitialized;
 	b32 IsRunning;
@@ -51,11 +52,6 @@ extern "C"
 #define _Def_Wish_Engine_OnFixedUpdate(name) void name(wish_game_state* state, wish_game_memory* memory)
 	typedef _Def_Wish_Engine_OnFixedUpdate(Wish_Engine_OnFixedUpdate);
 	__Wish_Export _Def_Wish_Engine_OnFixedUpdate(_Wish_Engine_OnFixedUpdate);
-
-	//Update event
-#define _Def_Wish_Engine_OnUpdate(name) void name(wish_game_state* state, wish_game_memory* memory)
-	typedef _Def_Wish_Engine_OnUpdate(Wish_Engine_OnUpdate);
-	__Wish_Export _Def_Wish_Engine_OnUpdate(_Wish_Engine_OnUpdate);
 
 	//Frame Event
 #define _Def_Wish_Engine_OnFrame(name) void name(wish_game_state* state, wish_game_memory* memory)

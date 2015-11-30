@@ -11,6 +11,6 @@
 #include <tchar.h>
 #include <string>
 
-#include <Wish.hpp>
+#include <Wish.h>
 
 // TODO: reference additional headers your program requires here

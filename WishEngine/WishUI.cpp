@@ -13,7 +13,7 @@
 namespace Wish
 {
 
-	FreetypeFont m_DebugFont;
+	wish_font DebugFont;
 
 	wish_ui::wish_ui() {
 		HoverComponent = NULL;
@@ -27,7 +27,7 @@ namespace Wish
 	void wish_ui::Init()
 	{
 		wish_ui_component::wish_ui_component(Root);
-		m_DebugFont.LoadFont("./data/fonts/arial.ttf", 14);
+		DebugFont.LoadFont("./data/fonts/arial.ttf", 18);
 
 		UIProgram = Wish_Asset_LoadShader("_ui", "./data/shaders/ui.glsl");
 		UIProgramColor = Wish_Asset_LoadShader("_ui_color", "./data/shaders/ui_color.glsl");
@@ -35,9 +35,9 @@ namespace Wish
 		WhiteTexture = Wish_Asset_LoadTexture("_ui_white_texture", "./data/textures/white.png");
 	}
 
-	void wish_ui::DebugString(const char* str, i32 x, i32 y) 
+	void wish_ui::DebugString(const char* str, r32 x, r32 y) 
 	{
-		m_DebugFont.GLDraw(str, (r32)x, (r32)y);
+		DebugFont.Print(str, x, y);
 	}
 	
 	void wish_ui::Rect(i32 x, i32 y, i32 w, i32 h, u32 color)
@@ -70,10 +70,18 @@ namespace Wish
 
 	void wish_ui::Draw()
 	{
-		HoverComponent = NULL;
+		//Start processing UI Events
+		//Find which component we are over
+		HoverComponent = Root.RayCast(Wish_Get_Input()->GetMouseX(),
+			Wish_Get_Input()->GetMouseY());
 
+		//Process UI actions
+		Root.DoInput(this);
+
+		//Set our UI shader
 		Wish_Renderer_SetShaderProgram(UIProgram);
 
+		//Draw the UI
 		Root.Draw(this);
 	}
 }

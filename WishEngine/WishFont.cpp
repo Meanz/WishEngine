@@ -1,10 +1,5 @@
-#include "stdafx.h"
-#include "Wish.h"
-
 #define STB_TRUETYPE_IMPLEMENTATION 1
 #include "stb_truetype.h"
-
-#include "WishFontRenderer.hpp"
 
 namespace Wish {
 
@@ -37,15 +32,16 @@ namespace Wish {
 			u8* tmpColorMultiplied = (u8*)Wish_Memory_Alloc(iWidth * iHeight * 4);
 			stbtt_BakeFontBitmap(ttf_buffer, stbtt_GetFontOffsetForIndex(ttf_buffer, 0), pixelHeight, tmpGreyscale, iWidth, iHeight, 32, 96, (stbtt_bakedchar*)this->GlyphData);
 			//Do texture thingymajig
-			i32 idx = 0;
+			i32 idx = 0, idx2 = 0;
 			u32 alpha;
 			for (i32 x = 0; x < iWidth; x++)
 			{
 				for (i32 y = 0; y < iHeight; y++)
 				{
-					idx = x + (y * iWidth);
+					idx = x + ((iHeight - y) * iWidth);
+					idx2 = x + (y * iWidth);
 					alpha = tmpGreyscale[idx];
-					*((u32*)&tmpColorMultiplied[idx * 4]) = (alpha << 24) | (alpha << 16) | (alpha << 8) | (alpha << 0);
+					*((u32*)&tmpColorMultiplied[idx2 * 4]) = (alpha << 24) | (alpha << 16) | (alpha << 8) | (alpha << 0);
 				}
 			}
 			FontTexture = wish_texture::Create(FILTER_LINEAR, FILTER_LINEAR, iWidth, iHeight, RGBA, RGBA, PIXELTYPE_UNSIGNED_BYTE, tmpColorMultiplied);
@@ -184,11 +180,12 @@ namespace Wish {
 
 				r32 w = q.x1 - q.x0;
 				r32 h = q.y1 - q.y0;
+			
 
 				r32 u0 = q.s0;
 				r32 u1 = q.s1;
-				r32 v0 = q.t1;
-				r32 v1 = q.t0;
+				r32 v0 = q.t0;
+				r32 v1 = q.t1;
 
 				r32 xMin = q.x0;
 				r32 xMax = xMin + w;
@@ -196,10 +193,10 @@ namespace Wish {
 				r32 yMax = q.y1;
 
 				cvtOff = vtOff;
-				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMin, 0.0), v2(u0, v1) };
-				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMin, 0.0), v2(u1, v1) };
-				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMax, 0.0), v2(u1, v0) };
-				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMax, 0.0), v2(u0, v0) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMin, 0.0), v2(u0, 1 - v0) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMin, 0.0), v2(u1, 1 - v0) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMax, -yMax, 0.0), v2(u1, 1 - v1) };
+				vertices[vtOff++] = Vertex_VT{ v3(xMin, -yMax, 0.0), v2(u0, 1 - v1) };
 				indices[iOff++] = cvtOff + 0;
 				indices[iOff++] = cvtOff + 1;
 				indices[iOff++] = cvtOff + 2;
@@ -225,6 +222,15 @@ namespace Wish {
 		mesh->Indices = 0;
 		Wish_Memory_Free(vertices);
 		Wish_Memory_Free(indices);
+	}
+
+	void wish_font::Render(wish_mesh* mesh)
+	{
+		//Draw mesh
+		//glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		mesh->Draw();
+		glDisable(GL_BLEND);
 	}
 
 	void wish_font::Print(const char* what, r32 x, r32 y)

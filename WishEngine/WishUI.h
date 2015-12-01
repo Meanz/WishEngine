@@ -1,8 +1,10 @@
 #pragma once
 
+#include "WishFont.h"
 #include "WishSprite.h"
 #include "WishUIComponent.h"
 #include "WishUIPanel.h"
+#include "WishUIText.h"
 #include "WishUIButton.h"
 #include "WishUIWindow.h"
 
@@ -22,6 +24,8 @@ namespace Wish
 		wish_texture* TestTexture;
 		//
 		wish_texture* WhiteTexture;
+		//
+		wish_font DebugFont;
 
 		// Input System
 		wish_ui_component* HoverComponent;

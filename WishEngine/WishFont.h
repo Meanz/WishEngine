@@ -37,6 +37,8 @@ namespace Wish
 
 		void MakeTextMesh(wish_mesh* mesh, r32 x, r32 y, const char* what);
 		b32 LoadFont(const char* location, r32 pixelHeight);
+
+		void Render(wish_mesh* mesh);
 		void Print(const char* what, r32 x, r32 y);
 
 	};

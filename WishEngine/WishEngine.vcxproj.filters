@@ -99,9 +99,6 @@
     <ClInclude Include="WishFrameInfo.hpp">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="WishFontRenderer.hpp">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
     <ClInclude Include="WishScancode.h">
       <Filter>Header Files\Engine\Core</Filter>
     </ClInclude>
@@ -231,6 +228,12 @@
     <ClInclude Include="stb_truetype.h">
       <Filter>Header Files\Engine\Util</Filter>
     </ClInclude>
+    <ClInclude Include="WishUIText.h">
+      <Filter>Header Files\Engine\Render\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WishFont.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -250,9 +253,6 @@
     </ClCompile>
     <ClCompile Include="WishIO.cpp">
       <Filter>Source Files\Engine\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="WishFontRenderer.cpp">
-      <Filter>Source Files\Engine\Render</Filter>
     </ClCompile>
     <ClCompile Include="Murmur3.cpp">
       <Filter>Source Files\Engine\IO</Filter>
@@ -343,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="WishLuaWrapper.cpp">
       <Filter>Source Files\Engine\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="WishUIText.cpp">
+      <Filter>Source Files\Engine\Render\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WishFont.cpp">
+      <Filter>Source Files\Engine\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

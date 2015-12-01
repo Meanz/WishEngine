@@ -1,20 +1,17 @@
 
 #include "stdafx.h"
 #include "Wish.h"
-#include "WishFontRenderer.hpp"
 
-
+#include "WishFont.cpp"
 #include "WishUIComponent.cpp"
 #include "WishUIPanel.cpp"
+#include "WishUIText.cpp"
 #include "WishUIButton.cpp"
 #include "WishUIWindow.cpp"
 
 
 namespace Wish
 {
-
-	wish_font DebugFont;
-
 	wish_ui::wish_ui() {
 		HoverComponent = NULL;
 		FocusComponent = NULL;
@@ -27,7 +24,7 @@ namespace Wish
 	void wish_ui::Init()
 	{
 		wish_ui_component::wish_ui_component(Root);
-		DebugFont.LoadFont("./data/fonts/arial.ttf", 18);
+		DebugFont.LoadFont("./data/fonts/ofl/VarelaRound-Regular.ttf", 72);
 
 		UIProgram = Wish_Asset_LoadShader("_ui", "./data/shaders/ui.glsl");
 		UIProgramColor = Wish_Asset_LoadShader("_ui_color", "./data/shaders/ui_color.glsl");

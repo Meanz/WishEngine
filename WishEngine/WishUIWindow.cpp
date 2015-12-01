@@ -8,7 +8,12 @@ namespace Wish
 		//Add(&Background);
 		Add(&TitleBar);
 		//Add stuff to me
+		CloseButton.Add(&CloseButtonText);
+		CloseButtonText.SetText("X");
 		TitleBar.Add(&CloseButton);
+		TitleText.Position.y = 32;
+		TitleText.IsTransformDirty = true;
+		TitleBar.Add(&TitleText);
 
 		CloseButton.Position.x = (r32)(width - 32);
 		CloseButton.Dimensions.x = 32;

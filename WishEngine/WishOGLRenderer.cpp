@@ -11,9 +11,6 @@
 #include "WishOGLFramebuffer.cpp"
 #include "WishOGLDeferredRenderer.cpp"
 
-//:P
-#include "WishFontRenderer.hpp"
-
 //Meh
 #include "WishOBJLoader.h"
 

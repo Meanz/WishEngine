@@ -34,8 +34,25 @@ namespace Wish
 		WISH_VERTEX_VNTBW
 	};
 
+	struct wish_rect
+	{
+		union {
+			struct {
+				v3 min;
+				v3 max;
+			};
+			struct {
+				r32 x0, y0, z0;
+				r32 x1, y1, z1;
+			};
+		};
+	};
+
 	class wish_mesh
 	{
+	private:
+		void CalculateBounds();
+
 	public:
 
 		r32* Vertices;
@@ -51,6 +68,7 @@ namespace Wish
 
 		wish_mesh_type MeshType;
 		b32 IsCompiled;
+		wish_rect Bounds;
 
 		__Wish_Export wish_mesh();
 		__Wish_Export ~wish_mesh();
@@ -58,6 +76,10 @@ namespace Wish
 		//DEPRECATED
 		__Wish_Export void SetVertices(r32* vertices, u32 numVertices, u32 vertexSize);
 		__Wish_Export void SetVertices(r32* vertices, u32 numVertices);
+
+		//
+		__Wish_Export void SetVertices(r32* vertices, u32 numVertices, wish_mesh_type meshType);
+
 		__Wish_Export void SetIndices(u32* indices, u32 numIndices);
 		void DeleteBuffers();
 		__Wish_Export b32 Compile();

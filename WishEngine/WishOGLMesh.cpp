@@ -27,18 +27,64 @@ namespace Wish
 		DeleteBuffers();
 	}
 
+	void wish_mesh::CalculateBounds()
+	{
+		if (NumVertices > 0) {
+			Bounds.min = v3(1000000);
+			Bounds.max = v3(-1000000);
+
+			u32 vSize = GetVertexSize(MeshType);
+			u8* offset = (u8*)Vertices;
+			v3* position = (v3*)offset;
+			for (u32 i = 0; i < NumVertices; i++)
+			{
+				position = (v3*)offset;
+				if (position->x < Bounds.min.x) {
+					Bounds.min.x = position->x;
+				}
+				if (position->x > Bounds.max.x) {
+					Bounds.max.x = position->x;
+				}
+				if (position->y < Bounds.min.y) {
+					Bounds.min.y = position->y;
+				}
+				if (position->y > Bounds.max.y) {
+					Bounds.max.y = position->y;
+				}
+				if (position->z < Bounds.min.z) {
+					Bounds.min.z = position->z;
+				}
+				if (position->z > Bounds.max.z) {
+					Bounds.max.z = position->z;
+				}
+				offset += vSize;
+			}
+		}
+		else {
+			Bounds.min = v3(0);
+			Bounds.max = v3(0);
+		}
+	}
+
 	void wish_mesh::SetVertices(r32* vertices, u32 numVertices, u32 vertexSize)
 	{
 		Vertices = vertices;
 		NumVertices = numVertices;
 		VertexSize = vertexSize;
+		CalculateBounds();
 	}
+
+
 
 	void wish_mesh::SetVertices(r32* vertices, u32 numVertices) {
 		Vertices = vertices;
 		NumVertices = numVertices;
 		VertexSize = GetVertexSize(MeshType);
+		CalculateBounds();
 	}
+
+	__Wish_Export void SetVertices(r32* vertices, u32 numVertices, wish_mesh_type meshType);
+
 
 	void wish_mesh::SetIndices(u32* indices, u32 numIndices)
 	{

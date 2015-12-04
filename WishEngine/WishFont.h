@@ -35,6 +35,8 @@ namespace Wish
 		wish_font();
 		~wish_font();
 
+		r32 GetTextWidth(const char* text);
+
 		void MakeTextMesh(wish_mesh* mesh, r32 x, r32 y, const char* what);
 		b32 LoadFont(const char* location, r32 pixelHeight);
 

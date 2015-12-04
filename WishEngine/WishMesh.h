@@ -34,6 +34,12 @@ namespace Wish
 		WISH_VERTEX_VNTBW
 	};
 
+	enum wish_mesh_drawmodes
+	{
+		WISH_DRAW_STATIC = GL_STATIC_DRAW,
+		WISH_DRAW_DYNAMIC = GL_DYNAMIC_DRAW
+	};
+
 	struct wish_rect
 	{
 		union {
@@ -46,6 +52,14 @@ namespace Wish
 				r32 x1, y1, z1;
 			};
 		};
+
+		r32 Width() {
+			return max.x - min.x;
+		}
+
+		r32 Height() {
+			return max.y - min.y;
+		}
 	};
 
 	class wish_mesh
@@ -67,6 +81,7 @@ namespace Wish
 		u32 IBO;
 
 		wish_mesh_type MeshType;
+		wish_mesh_drawmodes DrawMode;
 		b32 IsCompiled;
 		wish_rect Bounds;
 

@@ -20,6 +20,7 @@ namespace Wish
 	{
 		//Default to vnt
 		MeshType = WISH_VERTEX_VNT;
+		DrawMode = WISH_DRAW_STATIC;
 	}
 
 	wish_mesh::~wish_mesh()
@@ -112,6 +113,8 @@ namespace Wish
 		}
 	}
 
+	//TODO(Meanzie): At the moment everytime the mesh is compile we are getting new buffers, if we have dynamic buffers such as UIText 
+	//we don't want to generate new buffers but rather reuse the old ones
 	b32 wish_mesh::Compile()
 	{
 		DeleteBuffers();
@@ -131,7 +134,7 @@ namespace Wish
 				GL_ARRAY_BUFFER,
 				(GLsizeiptr)(NumVertices* VertexSize),
 				(void*)Vertices,
-				GL_STATIC_DRAW);
+				DrawMode);
 
 			//Assumption is VNT
 			if (MeshType == WISH_VERTEX_VT)
@@ -188,7 +191,7 @@ namespace Wish
 				GL_ELEMENT_ARRAY_BUFFER,
 				(GLsizeiptr)(NumIndices * sizeof(GLuint)),
 				(void*)Indices,
-				GL_STATIC_DRAW);
+				DrawMode);
 		}
 		glBindVertexArray(0);
 

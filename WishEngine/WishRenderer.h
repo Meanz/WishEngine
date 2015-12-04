@@ -50,19 +50,12 @@ namespace Wish
 
 		//
 
-		vec3 kernel[KERNEL_SIZE];
-		bool isKernelDefined = false;
+		vec3 Kernel[KERNEL_SIZE];
+		bool IsKernelDefined = false;
 
 		wish_camera* ActiveCamera;
-		bool m_bInit, DeferredRendering;
+		bool IsInitialized, DeferredRendering;
 		wish_shader_program* CurrentShaderProgram;
-		wish_timer m_Timer;
-
-		wish_timer m_Timer_GBuffer;
-		wish_timer m_Timer_PostProcessing;
-		wish_timer m_Timer_LastBlit;
-		wish_timer m_Timer_Flush;
-
 
 		//DEF RENDERING
 		geometry_buffer GeometryBuffer;

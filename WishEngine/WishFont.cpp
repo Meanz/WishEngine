@@ -49,110 +49,30 @@ namespace Wish {
 			//Wish_Memory_Free(tmpGreyscale);
 			return true;
 		}
-
 		b32 result = false;
-
-		{
-
-			//
-			stbtt_fontinfo Font;
-			stbtt_InitFont(&Font, (u8*)ttf_buffer, 0);
-
-			//
-			const u32 numChars = 78 + 5;
-			u8 chars[] = {
-				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '[', ']', '{', '}', '(', ')', '/', '\\', '&', '%', '-', '+', '*', ',', '.', '_',
-				':', ';', '\'', '<', '>'
-			};
-
-			//
-			i32 xPos = 0;
-			i32 yPos = 0;
-			i32 yMax = 0;
-
-			//
-			i32 width, height, xOffset, yOffset, advanceX, leftSideBearing, ascent, descent, lineGap;
-			u8 alpha;
-			for (i32 i = 0; i < numChars; i++)
-			{
-				//Also fetch information about the character
-				i32 codepoint = chars[i];
-				if (codepoint > MAX_GLYPHS) {
-					assert(false);
-				}
-				wish_font_glyph* glyph = &Glyphs[codepoint];
-
-				stbtt_GetCodepointHMetrics(&Font, codepoint, &advanceX, &leftSideBearing);
-				stbtt_GetFontVMetrics(&Font, &ascent, &descent, &lineGap);
-
-				glyph->Kerning = (r32)advanceX * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
-				glyph->Ascent = (r32)ascent * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
-				glyph->Descent = (r32)descent * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
-				glyph->LineGap = (r32)lineGap * stbtt_ScaleForPixelHeight(&Font, pixelHeight);
-
-				//Allocate
-				u8* bitmap = stbtt_GetCodepointBitmap(&Font, 0, stbtt_ScaleForPixelHeight(&Font, pixelHeight), chars[i], &width, &height, &xOffset, &yOffset);
-
-				//Blit it onto our texture thing
-				if (height > yMax) {
-					yMax = height;
-				}
-
-				//Check if the glyph fits
-				if (xPos + width >= iWidth) {
-					yPos += yMax;
-					xPos = 0;
-					yMax = 0;
-				}
-
-				//Check for bounds
-				if (xPos + width >= iWidth || yPos + height >= iHeight) {
-					assert(false);
-				}
-
-				//We have x and y pos, blit glyph
-				u32 pos = 0;
-				for (i32 x = 0; x < width; x++) {
-					for (i32 y = 0; y < height; y++) {
-						alpha = bitmap[x + (y * width)];
-						pos = ((xPos + x) + ((yPos + y) * iWidth)) * 4;
-						if (pos >= (512 * 512 * 4)) {
-							assert(false);
-						}
-						*((u32*)&tmpBitmap[pos]) = (alpha << 24) | (alpha << 16) | (alpha << 8) | (alpha << 0);
-					}
-				}
-
-				glyph->Width = (r32)width;
-				glyph->Height = (r32)height;
-				glyph->u0 = (r32)xPos / (r32)iWidth;
-				glyph->v1 = ((r32)yPos) / (r32)iHeight;
-				glyph->u1 = ((r32)xPos + (r32)width) / (r32)iWidth;
-				glyph->v0 = ((r32)yPos + (r32)height) / (r32)iHeight;
-
-				//Advance xpos
-				xPos += width;
-
-				//Free
-				stbtt_FreeBitmap(bitmap, 0);
-
-			}
-
-			FontTexture = wish_texture::Create(FILTER_NEAREST, FILTER_NEAREST, iWidth, iHeight, RGBA, RGBA, PIXELTYPE_UNSIGNED_BYTE, tmpBitmap);
-			//Wish_Primitive_Rect_VT(&mesh, 0, 0, (r32)iWidth, (r32)iHeight);
-
-			//Free
-			if (ttf_buffer)
-			{
-				//Wish_Memory_Free(ttf_buffer);
-			}
-		}
-
 		return result;
 	}
 
+	//Expensive hack
+	//TODO(Meanzie): Optimize
+	r32 wish_font::GetTextWidth(const char* str) 
+	{
+		i32 cnt = strlen(str);
+		r32 xOff = 0;
+		r32 yOff = 0;
+		r32 xMax = 0;
+		for (i32 i = 0; i < cnt; i++)
+		{
+			if (str[i] < MAX_GLYPHS)
+			{
+				stbtt_aligned_quad q;
+				stbtt_GetBakedQuad((stbtt_bakedchar*)this->GlyphData, 512, 512, (i32)str[i] - 32, &xOff, &yOff, &q, 1);
+				r32 w = q.x1 - q.x0;
+				xMax = q.x0 + w;
+			}
+		}
+		return xMax;
+	}
 
 	void wish_font::MakeTextMesh(wish_mesh* mesh, r32 x, r32 y, const char* str)
 	{
@@ -227,7 +147,7 @@ namespace Wish {
 	void wish_font::Render(wish_mesh* mesh)
 	{
 		//Draw mesh
-		//glEnable(GL_BLEND);
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		mesh->Draw();
 		glDisable(GL_BLEND);

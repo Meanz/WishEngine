@@ -17,7 +17,15 @@
 namespace Wish
 {
 
+	//Debug
 	wish_ui_window* dbgWnd;
+	wish_ui_text txtFps, txtFlush, txtGBuffer, txtPostProcessing, txtGeometryObjects, txtUI;
+	wish_timer m_Timer;
+	wish_timer m_Timer_GBuffer;
+	wish_timer m_Timer_PostProcessing;
+	wish_timer m_Timer_LastBlit;
+	wish_timer m_Timer_Flush;
+	wish_timer timerUI;
 
 	void wish_renderer::Init(int width, int height)
 	{
@@ -59,12 +67,29 @@ namespace Wish
 		Sphere = WishOBJLoader_Load("./data/models/sphere.obj");
 
 		dbgWnd = new wish_ui_window(200, 300);
-
+		Wish_Get_UI()->Root.Add(&txtFps);
+		txtFps.Position.x = 10;
+		txtFps.Position.y = 15;
+		Wish_Get_UI()->Root.Add(&txtFlush);
+		txtFlush.Position.x = 10;
+		txtFlush.Position.y = 30;
+		Wish_Get_UI()->Root.Add(&txtGBuffer);
+		txtGBuffer.Position.x = 10;
+		txtGBuffer.Position.y = 45;
+		Wish_Get_UI()->Root.Add(&txtPostProcessing);
+		txtPostProcessing.Position.x = 10;
+		txtPostProcessing.Position.y = 60;
+		Wish_Get_UI()->Root.Add(&txtGeometryObjects);
+		txtGeometryObjects.Position.x = 10;
+		txtGeometryObjects.Position.y = 75;
+		Wish_Get_UI()->Root.Add(&txtUI);
+		txtUI.Position.x = 10;
+		txtUI.Position.y = 90;
 		//
 		Wish_Get_UI()->Root.Add(dbgWnd);
 
 		//
-		m_bInit = true;
+		IsInitialized = true;
 	}
 
 	void Wish_Renderer_SetWorldMatrix(const mat4& other)
@@ -121,6 +146,10 @@ namespace Wish
 		}
 		SetShaderProgram(NULL);*/
 	}
+
+
+	i32 waitAmount = 2;
+	i32 numWaitFrames = waitAmount;
 
 	//Renderer does not need to know about scene, ooh yeah baby
 	void wish_renderer::Flush() {
@@ -219,17 +248,23 @@ namespace Wish
 		//Wish_Renderer_SetShaderProgram(Wish_Get_UI()->UIProgram);
 		//Wish_Renderer_ApplyUniforms(Wish_Get_UI()->UIProgram, nullptr, nullptr);
 
+		numWaitFrames--;
+		if (numWaitFrames < 0) {
+			txtUI.SetText((std::string("UI: ") + std::to_string(Wish_Timer_GetValue(&timerUI))).c_str());
+			txtFps.SetText((std::string("FPS: ") + std::to_string(Wish_Engine_GetFPS())).c_str());
+			txtFlush.SetText((std::string("Flush: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_Flush))).c_str());
+			txtGBuffer.SetText((std::string("GBuffer: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_GBuffer))).c_str());
+			txtPostProcessing.SetText((std::string("PostProcessing: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_PostProcessing))).c_str());
+			txtGeometryObjects.SetText((std::string("Geometry Objects: ") + std::to_string(NumGeometries)).c_str());
+			numWaitFrames = waitAmount;
+		}
 
-		//drawThing();
+	
 
-		Wish_Get_UI()->DebugString((std::string("FPS: ") + std::to_string(Wish_Engine_GetFPS())).c_str(), 5, 15);
-		Wish_Get_UI()->DebugString((std::string("Flush: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_Flush))).c_str(), 5, 30);
-		Wish_Get_UI()->DebugString((std::string("GBuffer: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_GBuffer))).c_str(), 5, 45);
-		Wish_Get_UI()->DebugString((std::string("PostProcessing: ") + std::to_string(Wish_Timer_GetValue(&m_Timer_PostProcessing))).c_str(), 5, 60);
-		Wish_Get_UI()->DebugString((std::string("Geometry Objects: ") + std::to_string(NumGeometries)).c_str(), 5, 75);
-		
 		//Draw UI!
+		Wish_Timer_Start(&timerUI);
 		Wish_Get_UI()->Draw();
+		Wish_Timer_Stop(&timerUI);
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();

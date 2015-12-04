@@ -108,7 +108,7 @@ namespace Wish
 			return;
 		}
 
-		if (!renderer.isKernelDefined) {
+		if (!renderer.IsKernelDefined) {
 
 			//val = 2 * (0-1) - 1.0;
 
@@ -122,10 +122,10 @@ namespace Wish
 				// located closer to the origin
 				v *= (0.1f + 0.9f * scale * scale);
 
-				renderer.kernel[i] = v;
+				renderer.Kernel[i] = v;
 			}
 
-			renderer.isKernelDefined = true;
+			renderer.IsKernelDefined = true;
 		}
 
 		//Iterate through all uniforms
@@ -200,7 +200,7 @@ namespace Wish
 				glUniformMatrix4fv(loc, 1, GL_FALSE, value_ptr(mat4(1.0f)));
 			}
 			else if (hash == hashTable[R_Kernel]) {
-				glUniform3fv(loc, KERNEL_SIZE, value_ptr(renderer.kernel[0]));
+				glUniform3fv(loc, KERNEL_SIZE, value_ptr(renderer.Kernel[0]));
 			}
 			else if (hash == hashTable[L_Position])
 			{

@@ -33,7 +33,7 @@ namespace Wish
 		//Copy string
 		Text = txt;
 		IsTransformDirty = true;
-		//IsGeometryDirty = true;
+		IsGeometryDirty = true;
 	}
 
 	void wish_ui_text::OnDraw(wish_ui* ui)
@@ -53,11 +53,16 @@ namespace Wish
 
 			if (IsTransformDirty) {
 				//Recalculate our internal transformation
-				r32 offX = -(Geometry.Bounds.min.x) - (Center ? (Geometry.Bounds.Width() / 2) : 0);
-				r32 offY = -(Geometry.Bounds.max.y) + (Center ? (Geometry.Bounds.Height() / 2) : 0 );
-				r32 scale = FontSize / Font->FontSize;
+				r32 offX = 0;// -(Geometry.Bounds.min.x) - (Center ? (Geometry.Bounds.Width() / 2) : 0);
+				r32 offY = -Font->FontSize;// -(Geometry.Bounds.max.y) + (Center ? (Geometry.Bounds.Height() / 2) : 0);
+				if (Center) {
+					//Do some magic
+					offY /= 2;
+					offX = -Geometry.Bounds.Width() / 2;
+				}
+				r32 scale = 1.0;//FontSize / Font->FontSize;
 				TextTransformationMatrix = glm::scale(glm::translate(TransformationMatrix, v3(offX * scale, offY * scale, 0.0)), v3(scale));
-			}
+			} 
 
 			//Apply texture
 			Wish_Renderer_BindTexture(0, &Font->FontTexture);
@@ -70,6 +75,9 @@ namespace Wish
 
 			//Draw the panel
 			Font->Render(&Geometry);
+
+			//
+			//Font->Print(Wish_CString(this->Text), this->GlobalPosition.x, this->GlobalPosition.y);
 		}
 		else
 		{

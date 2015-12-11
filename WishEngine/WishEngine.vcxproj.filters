@@ -135,9 +135,6 @@
     <ClInclude Include="WishDeferredRenderer.h">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="WishGeometry.h">
-      <Filter>Header Files\Engine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="WishTransform.h">
       <Filter>Header Files\Engine\Scene</Filter>
     </ClInclude>
@@ -152,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="WishEngine.h">
       <Filter>Header Files\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Wish.h">
-      <Filter>Header Files\Engine\Types</Filter>
     </ClInclude>
     <ClInclude Include="WishLight.h">
       <Filter>Header Files\Engine\Scene</Filter>
@@ -175,9 +169,6 @@
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="WishTexture.h">
-      <Filter>Header Files\Engine\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="WishMesh.h">
       <Filter>Header Files\Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="WishOGLTexture.h">
@@ -233,6 +224,15 @@
     </ClInclude>
     <ClInclude Include="WishFont.h">
       <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="WishGeometry.h">
+      <Filter>Header Files\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WishMesh.h">
+      <Filter>Header Files\Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Wish.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,7 @@ namespace Wish
 	enum PixelFormat
 	{
 #if WISH_RENDERER == WISH_OPENGL
+		LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA,
 		MONOCHROME = GL_ALPHA,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
@@ -50,8 +51,8 @@ namespace Wish
 
 	struct wish_texture
 	{
-		GLuint glHandle;
-		GLuint width, height;
+		GLuint GLHandle;
+		GLuint Width, Height;
 
 		static wish_texture Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType);
 		static wish_texture Create(u32 width, u32 height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, PixelType pixelType, void* data);

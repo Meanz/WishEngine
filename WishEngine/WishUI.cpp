@@ -24,7 +24,7 @@ namespace Wish
 	void wish_ui::Init()
 	{
 		wish_ui_component::wish_ui_component(Root);
-		DebugFont.LoadFont("./data/fonts/ofl/VarelaRound-Regular.ttf", 72);
+		DebugFont.FT_LoadFont("./data/fonts/ofl/VarelaRound-Regular.ttf", 14);
 
 		UIProgram = Wish_Asset_LoadShader("_ui", "./data/shaders/ui.glsl");
 		UIProgramColor = Wish_Asset_LoadShader("_ui_color", "./data/shaders/ui_color.glsl");

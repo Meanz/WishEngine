@@ -52,7 +52,7 @@ void Wish::Wish_Framebuffer_AttachTexture(wish_framebuffer* framebuffer, wish_te
 	//isBound?
 	Wish_Framebuffer_Bind(framebuffer);
 	//slot == GL_COLOR_ATTACHMENT0
-	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, pTexture->glHandle, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, pTexture->GLHandle, 0);
 }
 
 bool Wish::Wish_Framebuffer_Validate(wish_framebuffer* framebuffer) {

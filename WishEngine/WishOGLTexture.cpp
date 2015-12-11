@@ -24,9 +24,9 @@ namespace Wish
 		wish_texture tmp;
 		Wish_Texture_Create(&tmp);
 		glEnable(GL_TEXTURE_2D);
-		tmp.width = width;
-		tmp.height = height;
-		glBindTexture(GL_TEXTURE_2D, tmp.glHandle);
+		tmp.Width = width;
+		tmp.Height = height;
+		glBindTexture(GL_TEXTURE_2D, tmp.GLHandle);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLfloat)minFilter);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLfloat)magFilter);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -38,11 +38,11 @@ namespace Wish
 };
 
 void Wish::Wish_Texture_Create(wish_texture* texture) {
-	glGenTextures(1, &texture->glHandle);
-	ASSERT(texture->glHandle != 0);
+	glGenTextures(1, &texture->GLHandle);
+	ASSERT(texture->GLHandle != 0);
 }
 void Wish::Wish_Texture_Destroy(wish_texture* texture) {
-	glDeleteTextures(1, &texture->glHandle);
+	glDeleteTextures(1, &texture->GLHandle);
 }
 void Wish::Wish_Texture_Create(wish_texture* texture, GLuint width, GLuint height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, GLenum type) {
 	Wish_Texture_Create(texture, width, height, pixelFormatStore, pixelFormatIn, type, GL_NEAREST, GL_NEAREST);
@@ -50,9 +50,9 @@ void Wish::Wish_Texture_Create(wish_texture* texture, GLuint width, GLuint heigh
 void Wish::Wish_Texture_Create(wish_texture* texture, GLuint width, GLuint height, PixelFormat pixelFormatStore, PixelFormat pixelFormatIn, GLenum type, GLfloat minFilter, GLfloat magFilter) {
 	Wish_Texture_Create(texture);
 	glEnable(GL_TEXTURE_2D);
-	texture->width = width;
-	texture->height = height;
-	glBindTexture(GL_TEXTURE_2D, texture->glHandle);
+	texture->Width = width;
+	texture->Height = height;
+	glBindTexture(GL_TEXTURE_2D, texture->GLHandle);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -67,7 +67,7 @@ void Wish::Wish_Texture_Bind(wish_texture* texture, GLenum slot) {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else {
-		glBindTexture(GL_TEXTURE_2D, texture->glHandle);
+		glBindTexture(GL_TEXTURE_2D, texture->GLHandle);
 	}
 }
 void Wish::Wish_Texture_Enable() {
@@ -82,8 +82,8 @@ bool Wish::Wish_Texture_DEBUGLoadTexture(wish_texture* texture, const char* file
 	SDL_Surface *image = IMG_Load(fileName);
 	//If we have a texture
 	//Free it
-	if (texture->glHandle > 0) {
-		glDeleteTextures(1, &texture->glHandle);
+	if (texture->GLHandle > 0) {
+		glDeleteTextures(1, &texture->GLHandle);
 	}
 	if (image != NULL) {
 
@@ -111,12 +111,12 @@ bool Wish::Wish_Texture_DEBUGLoadTexture(wish_texture* texture, const char* file
 		{
 			glEnable(GL_TEXTURE_2D);
 			Wish_Texture_Create(texture);
-			ASSERT((texture->glHandle != 0));
+			ASSERT((texture->GLHandle != 0));
 
-			texture->width = image->w;
-			texture->height = image->h;
+			texture->Width = image->w;
+			texture->Height = image->h;
 
-			glBindTexture(GL_TEXTURE_2D, texture->glHandle);
+			glBindTexture(GL_TEXTURE_2D, texture->GLHandle);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
